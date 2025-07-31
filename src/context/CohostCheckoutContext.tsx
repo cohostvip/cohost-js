@@ -13,6 +13,10 @@ export type CohostCheckoutContextType = {
     cartSession: CartSession | null;
     joinGroup: (groupId: string) => Promise<string | null>;
     updateItem: (offeringId: string, quantity: number, options?: any) => Promise<void>;
+
+    incrementItem: (offeringId: string, options?: any) => Promise<void>;
+    decrementItem: (offeringId: string) => Promise<void>;
+
     updateCartSession: (data: Partial<UpdatableCartSession>) => Promise<void>;
     placeOrder: () => Promise<CartSession | undefined>;
     processPayment: (data: unknown) => Promise<unknown>;
@@ -97,6 +101,49 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
         }
     }
 
+    const incrementItem = async (itemId: string, options?: any) => {
+        assertCartSession();
+
+        try {
+            const item = cartSession?.items.find(item => item.id === itemId);
+
+            if (!item) {
+                return;
+            }
+
+            const qty = Math.max(item.quantity + 1, item.offering?.minimumQuantity || 1);
+
+            if (item.offering?.maximumQuantity && qty > item.offering.maximumQuantity) {
+                return;
+            }
+
+            if (item.quantity !== qty) {
+                await updateItem(itemId, qty, options);
+            }
+        } catch (error) {
+            console.error("Error incrementing cart item:", error);
+        }
+    };
+
+    const decrementItem = async (itemId: string) => {
+        assertCartSession();
+
+        try {
+            const item = cartSession?.items.find(item => item.id === itemId);
+
+            if (!item) {
+                return;
+            }
+
+            const qty = item.quantity === (item.offering.minimumQuantity || 1) ? 0 : item.quantity - 1;
+
+            if (item.quantity !== qty) {
+                await updateItem(itemId, qty);
+            }
+        } catch (error) {
+            console.error("Error decrementing cart item:", error);
+        }
+    };
 
     const updateCartSession = async (data: Partial<UpdatableCartSession>) => {
         assertCartSession();
@@ -191,7 +238,14 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
         <CohostCheckoutContext.Provider value={{
             cartSessionId,
             cartSession,
+
+            /** 
+             * Item quantity management
+             */
             updateItem,
+            incrementItem,
+            decrementItem,
+
             updateCartSession,
             placeOrder,
             joinGroup,
@@ -200,6 +254,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             removeCoupon,
             setCustomer,
             setBillingAddress,
+            
         }}>
             {children}
         </CohostCheckoutContext.Provider>

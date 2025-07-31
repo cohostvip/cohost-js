@@ -5,3 +5,4 @@ export { PaymentElementProvider, usePaymentElement } from './context/PaymentElem
 export { CohostStartCheckoutProvider } from './provider/CohostStartCheckoutProvider';
 export { CreditCardInformation } from './lib/tokenizers/types';
 export { useCohost } from './hooks/useCohost';
+export { formatCurrency } from './lib/utils';
