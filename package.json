@@ -45,10 +45,10 @@
   },
   "packageManager": "pnpm@10.8.1",
   "devDependencies": {
-    "@types/node": "catalog:",
+    "@types/node": "24.6.2",
     "@vitest/ui": "^3.2.0",
-    "tsup": "catalog:",
-    "typescript": "catalog:",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3",
     "vite": "6.2.2",
     "vitest": "^3.2.0"
   }
