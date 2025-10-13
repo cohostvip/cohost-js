@@ -1,6 +1,6 @@
 {
   "name": "@cohostvip/cohost-react",
-  "version": "0.1.17",
+  "version": "0.2.0",
   "description": "React bindings for the Cohost API",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -27,15 +27,15 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@cohostvip/cohost-node": "^0.1.16"
+    "@cohostvip/cohost-node": "^0.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "^16.3.0",
-    "@types/react": "catalog:frontend",
-    "@types/react-dom": "catalog:frontend",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
     "jsdom": "26.0.0",
-    "typescript": "catalog:",
+    "typescript": "5.9.3",
     "vitest": "^3.2.0"
   },
   "repository": {
