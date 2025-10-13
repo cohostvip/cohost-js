@@ -15,5 +15,6 @@ export function createCohostClient(options: CohostClientOptions): CohostClient {
 
 
 export { CohostClient }
+export { type Coupon } from './api/coupons';
 
 export * from '../types';

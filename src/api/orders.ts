@@ -55,4 +55,23 @@ export class OrdersAPI extends CohostEndpoint {
     const query = new URLSearchParams(filters as Record<string, string>).toString();
     return this.request(`/orders${query ? `?${query}` : ''}`);
   }
+
+  /**
+   * Send order confirmation email to customer.
+   *
+   * @param id - The unique identifier of the order
+   * @returns A Promise resolving to the confirmation response
+   * @throws Will throw an error if the request fails or order is not found
+   *
+   * @example
+   * ```ts
+   * const result = await client.orders.sendConfirmation('ord_abc123');
+   * console.log(result.response); // Confirmation sent status
+   * ```
+   */
+  async sendConfirmation(id: string) {
+    return this.request<{ response: any }>(`/orders/${id}/send-confirmation`, {
+      method: 'POST'
+    });
+  }
 }
