@@ -1,0 +1,51 @@
+{
+  "name": "@cohost/types",
+  "version": "0.0.1",
+  "description": "TypeScript type definitions for the Cohost API",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --watch --project tsconfig.json",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "zod": "^3.23.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cohostvip/cohost-js.git",
+    "directory": "packages/types"
+  },
+  "bugs": {
+    "url": "https://github.com/cohostvip/cohost-js/issues"
+  },
+  "homepage": "https://github.com/cohostvip/cohost-js/tree/main/packages/types",
+  "author": "Cohost <support@cohost.vip> (https://cohost.vip)",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cohost",
+    "types",
+    "typescript",
+    "sdk"
+  ]
+}

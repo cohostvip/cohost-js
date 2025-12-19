@@ -1,0 +1,55 @@
+{
+  "name": "@cohost/node",
+  "version": "0.2.1",
+  "description": "Cohost Node.js SDK",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/cohostvip/cohost-js/tree/main/packages/node",
+  "author": "Cohost <support@cohost.vip> (https://cohost.vip)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cohostvip/cohost-js.git",
+    "directory": "packages/node"
+  },
+  "bugs": {
+    "url": "https://github.com/cohostvip/cohost-js/issues"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cohost",
+    "sdk",
+    "api",
+    "typescript",
+    "node"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "24.6.2",
+    "@vitest/ui": "^3.2.0",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3",
+    "vite": "^6.3.6",
+    "vitest": "^3.2.0"
+  }
+}
