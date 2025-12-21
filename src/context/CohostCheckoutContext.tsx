@@ -11,7 +11,7 @@ export type CohostCheckoutProviderProps = {
 export type CohostCheckoutContextType = {
     cartSessionId: string;
     cartSession: CartSession | null;
-    joinGroup: (groupId: string) => Promise<string | null>;
+    joinGroup: (groupId: string) => Promise<{ itemId: string | null; error?: { message: string; status?: number } }>;
     updateItem: (offeringId: string, quantity: number, options?: any) => Promise<void>;
 
     incrementItem: (offeringId: string, options?: any) => Promise<void>;
@@ -71,22 +71,28 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
         }
     }
 
-    const joinGroup = async (groupId: string): Promise<string | null> => {
+    const joinGroup = async (groupId: string): Promise<{ itemId: string | null; error?: { message: string; status?: number } }> => {
         assertCartSession();
 
         try {
             const updatedCart = await client.cart.joinTableCommitment(cartSessionId, groupId);
 
-
-
             setCartSession(updatedCart);
 
-            return updatedCart
+            const itemId = updatedCart
                 .items
                 .find((item: any) => item.tableCommitmentId === groupId)?.id || null;
-        } catch (error) {
+
+            return { itemId };
+        } catch (error: any) {
             console.error("Error joining group:", error);
-            return null;
+            return {
+                itemId: null,
+                error: {
+                    message: error?.message || 'Failed to join group',
+                    status: error?.status || error?.response?.status,
+                },
+            };
         }
     }
 
