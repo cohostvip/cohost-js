@@ -1,9 +1,0 @@
-src/
-tests/
-*.ts
-*.test.ts
-tsconfig*.json
-vite.config.ts
-tsup.config.ts
-vitest.*
-jest.*
