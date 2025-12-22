@@ -40,12 +40,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cohostvip/cohost-react.git"
+    "url": "https://github.com/cohostvip/cohost-js.git",
+    "directory": "packages/react"
   },
   "bugs": {
-    "url": "https://github.com/cohostvip/cohost-react/issues"
+    "url": "https://github.com/cohostvip/cohost-js/issues"
   },
-  "homepage": "https://github.com/cohostvip/cohost-react",
+  "homepage": "https://github.com/cohostvip/cohost-js/tree/main/packages/react",
   "author": "Cohost <support@cohost.vip> (https://cohost.vip)",
   "license": "MIT",
   "publishConfig": {

@@ -14,14 +14,15 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/cohostvip/cohost-node",
+  "homepage": "https://github.com/cohostvip/cohost-js/tree/main/packages/node",
   "author": "Cohost <support@cohost.vip> (https://cohost.vip)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cohostvip/cohost-node.git"
+    "url": "https://github.com/cohostvip/cohost-js.git",
+    "directory": "packages/node"
   },
   "bugs": {
-    "url": "https://github.com/cohostvip/cohost-node/issues"
+    "url": "https://github.com/cohostvip/cohost-js/issues"
   },
   "scripts": {
     "build": "tsup",
