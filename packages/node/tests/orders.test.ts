@@ -17,7 +17,7 @@ describe('OrdersAPI', () => {
     const api = new OrdersAPI(mockRequest, settings);
     const result = await api.fetch('order-1', 'user-xyz');
 
-    expect(mockRequest).toHaveBeenCalledWith('/orders/order-1');
+    expect(mockRequest).toHaveBeenCalledWith('/orders/order-1?uid=user-xyz');
     expect(result).toEqual(mockOrder);
   });
 });

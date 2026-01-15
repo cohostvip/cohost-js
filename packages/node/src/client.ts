@@ -10,8 +10,8 @@ import { CohostClientSettings } from './settings';
  * Configuration options for instantiating a CohostClient.
  */
 export interface CohostClientOptions {
-  /** API token used for authenticated requests. */
-  token: string;
+  /** API token used for authenticated requests. Defaults to COHOST_API_TOKEN or NEXT_PUBLIC_COHOST_API_TOKEN env var. */
+  token?: string;
 
   /** Optional client settings such as debug mode or custom API URL. */
   settings?: CohostClientSettings;
@@ -28,10 +28,11 @@ export class CohostClient {
 
   private readonly baseOptions: CohostClientOptions;
 
-  constructor(options: CohostClientOptions, customRequestFn?: RequestFn) {
-    this.baseOptions = options;
+  constructor(options: CohostClientOptions = {}, customRequestFn?: RequestFn) {
+    const token = options.token || process.env.COHOST_API_TOKEN || process.env.NEXT_PUBLIC_COHOST_API_TOKEN || null;
+    const settings = options.settings || {};
 
-    const { token, settings = {} } = options;
+    this.baseOptions = { ...options, token: token ?? undefined };
 
     const sharedRequest = customRequestFn ?? request({
       token,
@@ -57,7 +58,7 @@ export class CohostClient {
 
     const overriddenRequest: RequestFn = (path, options = {}) =>
       request({
-        token: overrides.token ?? token,
+        token: overrides.token ?? token ?? null,
         baseUrl: overrides.baseUrl ?? settings.apiUrl ?? apiBaseUrl,
         debug: settings.debug,
       })(path, {
