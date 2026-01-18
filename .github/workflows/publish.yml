@@ -36,7 +36,11 @@ jobs:
       - name: Publish @cohostvip/cohost-node
         working-directory: packages/node
         run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @cohostvip/cohost-react
         working-directory: packages/react
         run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
