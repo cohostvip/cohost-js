@@ -142,6 +142,14 @@ const request = ({ token, baseUrl = apiBaseUrl, debug = false }: RequestProps): 
       (responseBody as any).status === "ok" &&
       "data" in responseBody
     ) {
+      // Handle paginated responses - return { results, pagination } structure
+      if ("pagination" in responseBody) {
+        return {
+          results: (responseBody as any).data,
+          pagination: (responseBody as any).pagination,
+        } as T;
+      }
+      // Regular response - just return data
       return (responseBody as { data: T }).data;
     }
 
