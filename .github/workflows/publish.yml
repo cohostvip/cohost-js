@@ -33,6 +33,12 @@ jobs:
       - name: Build all packages
         run: pnpm -r build
 
+      - name: Publish @cohostvip/cohost-auth
+        working-directory: packages/auth
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish @cohostvip/cohost-node
         working-directory: packages/node
         run: npm publish --provenance --access public
