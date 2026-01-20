@@ -56,6 +56,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@cohostvip/cohost-auth':
+        specifier: workspace:*
+        version: link:../auth
       '@cohostvip/cohost-node':
         specifier: ^0.2.4
         version: 0.2.4

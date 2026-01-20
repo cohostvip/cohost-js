@@ -6,3 +6,14 @@ export { CohostStartCheckoutProvider } from './provider/CohostStartCheckoutProvi
 export { CreditCardInformation } from './lib/tokenizers/types';
 export { useCohost } from './hooks/useCohost';
 export { formatCurrency } from './lib/utils';
+
+// Auth bindings
+export {
+  AuthProvider,
+  type AuthProviderProps,
+  useAuth,
+  useUser,
+  useAuthClient,
+  AuthGuard,
+  type AuthGuardProps,
+} from './auth';
