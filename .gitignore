@@ -30,5 +30,4 @@ coverage/
 .env
 .env.local
 .env.*.local
-
 # Package manager lock files are tracked for reproducibility
