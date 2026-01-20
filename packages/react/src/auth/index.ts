@@ -1,5 +1,5 @@
 // Auth context and provider
-export { AuthProvider, type AuthProviderProps } from './AuthContext';
+export { AuthProvider, type AuthProviderProps, type AuthContextValue } from './AuthContext';
 
 // Hooks
 export { useAuth, useUser, useAuthClient } from './hooks';

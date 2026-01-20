@@ -6,6 +6,8 @@ import {
   type AuthConfig,
   type AuthState,
   type AuthUser,
+  type OTPType,
+  type SetAuthenticatedInput,
 } from '@cohostvip/cohost-auth';
 
 /**
@@ -16,14 +18,16 @@ export interface AuthContextValue {
   state: AuthState;
   /** The underlying AuthClient instance */
   client: AuthClient;
-  /** Request OTP to be sent to email */
-  requestOTP: (email: string) => Promise<boolean>;
+  /** Request OTP to be sent to contact (email or phone) */
+  requestOTP: (contact: string, type?: OTPType) => Promise<boolean>;
   /** Verify OTP and sign in */
-  verifyOTP: (email: string, code: string) => Promise<AuthUser>;
+  verifyOTP: (contact: string, code: string) => Promise<AuthUser>;
   /** Sign out the current user */
   signOut: () => Promise<void>;
   /** Get current access token (refreshing if needed) */
   getToken: () => Promise<string | null>;
+  /** Manually set authenticated state (for custom auth flows like passkey) */
+  setAuthenticated: (input: SetAuthenticatedInput) => void;
 }
 
 /**
@@ -100,10 +104,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     () => ({
       state,
       client,
-      requestOTP: (email: string) => client.requestOTP(email),
-      verifyOTP: (email: string, code: string) => client.verifyOTP(email, code),
+      requestOTP: (contact: string, type?: OTPType) => client.requestOTP(contact, type),
+      verifyOTP: (contact: string, code: string) => client.verifyOTP(contact, code),
       signOut: () => client.signOut(),
       getToken: () => client.getToken(),
+      setAuthenticated: (input: SetAuthenticatedInput) => client.setAuthenticated(input),
     }),
     [state, client]
   );

@@ -29,19 +29,19 @@ describe('AuthApi', () => {
   });
 
   describe('requestOTP', () => {
-    it('should call correct endpoint with email', async () => {
+    it('should call correct endpoint with contact and type', async () => {
       mockFetch.mockResolvedValue(mockOkResponse({ sent: true }));
 
-      const result = await api.requestOTP({ email: 'test@example.com' });
+      const result = await api.requestOTP({ contact: 'test@example.com', type: 'email' });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/otp/request',
+        'https://api.example.com/otp/request',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
             'Content-Type': 'application/json',
           }),
-          body: JSON.stringify({ email: 'test@example.com' }),
+          body: JSON.stringify({ contact: 'test@example.com', type: 'email' }),
         })
       );
       expect(result).toEqual({ sent: true });
@@ -50,12 +50,12 @@ describe('AuthApi', () => {
     it('should include channelId when provided', async () => {
       mockFetch.mockResolvedValue(mockOkResponse({ sent: true }));
 
-      await api.requestOTP({ email: 'test@example.com', channelId: 'channel-1' });
+      await api.requestOTP({ contact: 'test@example.com', type: 'email', channelId: 'channel-1' });
 
       expect(mockFetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
-          body: JSON.stringify({ email: 'test@example.com', channelId: 'channel-1' }),
+          body: JSON.stringify({ contact: 'test@example.com', type: 'email', channelId: 'channel-1' }),
         })
       );
     });
@@ -71,15 +71,15 @@ describe('AuthApi', () => {
       mockFetch.mockResolvedValue(mockOkResponse(authResult));
 
       const result = await api.verifyOTP({
-        email: 'test@example.com',
+        contact: 'test@example.com',
         code: '123456',
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/otp/verify',
+        'https://api.example.com/otp/verify',
         expect.objectContaining({
           method: 'POST',
-          body: JSON.stringify({ email: 'test@example.com', code: '123456' }),
+          body: JSON.stringify({ contact: 'test@example.com', code: '123456' }),
         })
       );
       expect(result).toEqual(authResult);
@@ -98,7 +98,7 @@ describe('AuthApi', () => {
       const result = await api.refreshToken({ refreshToken: 'old-refresh-token' });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/token/refresh',
+        'https://api.example.com/token/refresh',
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ refreshToken: 'old-refresh-token' }),
@@ -116,7 +116,7 @@ describe('AuthApi', () => {
       const result = await api.validateToken({ accessToken: 'test-token' });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/token/validate',
+        'https://api.example.com/token/validate',
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ accessToken: 'test-token' }),
@@ -133,7 +133,7 @@ describe('AuthApi', () => {
       const result = await api.revokeToken('token-to-revoke');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/token/revoke',
+        'https://api.example.com/token/revoke',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
@@ -156,7 +156,7 @@ describe('AuthApi', () => {
       const result = await api.getCurrentUser('access-token');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/me',
+        'https://api.example.com/me',
         expect.objectContaining({
           method: 'GET',
           headers: expect.objectContaining({
@@ -178,7 +178,7 @@ describe('AuthApi', () => {
     it('should throw network error on fetch failure', async () => {
       mockFetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(api.requestOTP({ email: 'test@example.com' })).rejects.toThrow('Network error');
+      await expect(api.requestOTP({ contact: 'test@example.com', type: 'email' })).rejects.toThrow('Network error');
     });
   });
 });

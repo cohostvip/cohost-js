@@ -7,6 +7,8 @@ import {
   AuthError,
   OTPRequestInput,
   OTPVerifyInput,
+  OTPType,
+  SetAuthenticatedInput,
 } from './types';
 import { authErrors } from './errors';
 import { createStorage, TokenStorage } from './storage';
@@ -164,13 +166,16 @@ export class AuthClient {
   // === OTP Authentication ===
 
   /**
-   * Request OTP code to be sent to email
+   * Request OTP code to be sent to contact (email or phone)
+   * @param contact - Email address or phone number
+   * @param type - Type of contact ('email' or 'phone')
    */
-  async requestOTP(email: string): Promise<boolean> {
-    this.debug('Requesting OTP for:', email);
+  async requestOTP(contact: string, type: OTPType = 'email'): Promise<boolean> {
+    this.debug('Requesting OTP for:', contact, type);
 
     const input: OTPRequestInput = {
-      email,
+      contact,
+      type,
       channelId: this.config.channelId,
     };
 
@@ -180,12 +185,14 @@ export class AuthClient {
 
   /**
    * Verify OTP code and sign in
+   * @param contact - Email address or phone number that received the OTP
+   * @param code - OTP code to verify
    */
-  async verifyOTP(email: string, code: string): Promise<AuthUser> {
-    this.debug('Verifying OTP for:', email);
+  async verifyOTP(contact: string, code: string): Promise<AuthUser> {
+    this.debug('Verifying OTP for:', contact);
 
     const input: OTPVerifyInput = {
-      email,
+      contact,
       code,
       channelId: this.config.channelId,
     };
@@ -218,6 +225,41 @@ export class AuthClient {
     }
 
     return result.user;
+  }
+
+  // === Custom Auth Flow ===
+
+  /**
+   * Manually set authenticated state after a custom auth flow (e.g., passkey)
+   * Use this when you handle authentication outside the standard OTP flow
+   */
+  setAuthenticated(input: SetAuthenticatedInput): void {
+    this.debug('Setting authenticated state for:', input.user.uid);
+
+    const { accessToken, user, refreshToken, expiresIn = 7 * 24 * 60 * 60 } = input;
+
+    // Store tokens and user
+    this.storage.setAccessToken(accessToken);
+    this.storage.setUser(user);
+
+    if (refreshToken) {
+      this.storage.setRefreshToken(refreshToken);
+    }
+
+    const expiry = Math.floor(Date.now() / 1000) + expiresIn;
+    this.storage.setTokenExpiry(expiry);
+
+    this.updateState({
+      isAuthenticated: true,
+      isLoading: false,
+      user,
+      accessToken,
+      error: null,
+    });
+
+    if (this.config.autoRefresh && refreshToken) {
+      this.scheduleRefresh(expiresIn);
+    }
   }
 
   // === Token Management ===

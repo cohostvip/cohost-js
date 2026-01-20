@@ -11,6 +11,7 @@ export { formatCurrency } from './lib/utils';
 export {
   AuthProvider,
   type AuthProviderProps,
+  type AuthContextValue,
   useAuth,
   useUser,
   useAuthClient,

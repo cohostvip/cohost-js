@@ -151,7 +151,7 @@ describe('useAuth', () => {
     });
 
     expect(mockFetch).toHaveBeenCalledWith(
-      'https://api.example.com/v1/auth/otp/request',
+      'https://api.example.com/otp/request',
       expect.objectContaining({
         method: 'POST',
         body: expect.stringContaining('test@example.com'),

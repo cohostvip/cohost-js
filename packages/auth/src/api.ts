@@ -105,10 +105,10 @@ export class AuthApi {
   // === OTP Methods ===
 
   /**
-   * Request OTP code to be sent to email
+   * Request OTP code to be sent to contact (email or phone)
    */
   async requestOTP(input: OTPRequestInput): Promise<{ sent: boolean }> {
-    return this.request('/v1/auth/otp/request', {
+    return this.request('/otp/request', {
       method: 'POST',
       body: input,
     });
@@ -118,7 +118,7 @@ export class AuthApi {
    * Verify OTP code and get auth result
    */
   async verifyOTP(input: OTPVerifyInput): Promise<AuthResult> {
-    return this.request('/v1/auth/otp/verify', {
+    return this.request('/otp/verify', {
       method: 'POST',
       body: input,
     });
@@ -130,7 +130,7 @@ export class AuthApi {
    * Refresh token pair using refresh token
    */
   async refreshToken(input: TokenRefreshInput): Promise<TokenPair> {
-    return this.request('/v1/auth/token/refresh', {
+    return this.request('/token/refresh', {
       method: 'POST',
       body: input,
     });
@@ -140,7 +140,7 @@ export class AuthApi {
    * Validate access token
    */
   async validateToken(input: TokenValidateInput): Promise<TokenValidateResult> {
-    return this.request('/v1/auth/token/validate', {
+    return this.request('/token/validate', {
       method: 'POST',
       body: input,
     });
@@ -150,7 +150,7 @@ export class AuthApi {
    * Revoke token (sign out)
    */
   async revokeToken(token: string): Promise<{ revoked: boolean }> {
-    return this.request('/v1/auth/token/revoke', {
+    return this.request('/token/revoke', {
       method: 'POST',
       token,
     });
@@ -162,7 +162,7 @@ export class AuthApi {
    * Get current authenticated user
    */
   async getCurrentUser(token: string): Promise<{ user: AuthUser; channelId?: string }> {
-    return this.request('/v1/auth/me', {
+    return this.request('/me', {
       method: 'GET',
       token,
     });

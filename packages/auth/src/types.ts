@@ -75,11 +75,18 @@ export type AuthStateListener = (state: AuthState) => void;
 export type Unsubscribe = () => void;
 
 /**
+ * OTP contact type
+ */
+export type OTPType = 'email' | 'phone';
+
+/**
  * OTP request input
  */
 export interface OTPRequestInput {
-  /** Email address to send OTP to */
-  email: string;
+  /** Contact (email or phone) to send OTP to */
+  contact: string;
+  /** Type of contact */
+  type: OTPType;
   /** Optional channel ID */
   channelId?: string;
 }
@@ -88,12 +95,26 @@ export interface OTPRequestInput {
  * OTP verify input
  */
 export interface OTPVerifyInput {
-  /** Email address that received the OTP */
-  email: string;
+  /** Contact (email or phone) that received the OTP */
+  contact: string;
   /** OTP code to verify */
   code: string;
   /** Optional channel ID */
   channelId?: string;
+}
+
+/**
+ * Input for manually setting authenticated state (for custom auth flows)
+ */
+export interface SetAuthenticatedInput {
+  /** Access token */
+  accessToken: string;
+  /** User object */
+  user: AuthUser;
+  /** Refresh token (optional) */
+  refreshToken?: string;
+  /** Token expiry in seconds (default: 7 days) */
+  expiresIn?: number;
 }
 
 /**
@@ -130,6 +151,8 @@ export interface TokenValidateResult {
  */
 export type AuthErrorCode =
   | 'INVALID_EMAIL'
+  | 'INVALID_PHONE'
+  | 'INVALID_CONTACT'
   | 'INVALID_OTP'
   | 'OTP_EXPIRED'
   | 'INVALID_TOKEN'

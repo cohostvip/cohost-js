@@ -60,11 +60,11 @@ describe('AuthClient', () => {
     it('should call API and return success', async () => {
       mockFetch.mockResolvedValue(mockOkResponse({ sent: true }));
 
-      const result = await client.requestOTP('test@example.com');
+      const result = await client.requestOTP('test@example.com', 'email');
 
       expect(result).toBe(true);
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/v1/auth/otp/request',
+        'https://api.example.com/otp/request',
         expect.objectContaining({
           method: 'POST',
           body: expect.stringContaining('test@example.com'),
