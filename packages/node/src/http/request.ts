@@ -31,7 +31,10 @@ type RequestOptions = {
   pagination?: Pagination;
 };
 
-export const paginatedOptions = (req: PaginatedRequest<any>, options?: Partial<RequestOptions>): RequestOptions => {
+export const paginatedOptions = (req?: PaginatedRequest<any>, options?: Partial<RequestOptions>): RequestOptions => {
+  if (!req) {
+    return options ?? {};
+  }
   const { pagination, ...rest } = req;
   return {
     query: rest,
