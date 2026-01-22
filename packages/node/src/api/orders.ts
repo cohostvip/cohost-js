@@ -1,8 +1,19 @@
 import { CohostEndpoint } from '../endpoint';
+import { Attendee, Order, PaginatedRequest, PaginatedResponse } from '../../types/index';
+import { paginatedOptions } from '../http/request';
+
+/**
+ * Order list filters
+ */
+export interface OrderListFilters {
+  status?: string;
+  startDate?: string;
+  endDate?: string;
+}
 
 /**
  * Provides methods to interact with the Cohost Orders API.
- * 
+ *
  * Usage:
  * ```ts
  * const client = new CohostClient({ token: 'your-token' });
@@ -14,46 +25,39 @@ export class OrdersAPI extends CohostEndpoint {
 
   /**
    * Fetch a single order by ID.
-   * 
+   *
    * @param id - The unique identifier of the order
    * @param uid - The unique user ID associated with the order (currently unused but reserved for future auth context)
    * @returns A Promise resolving to the order object
    * @throws Will throw an error if the request fails or the order is not found
    */
-  async fetch(id: string, uid: string) {
-    // uid is reserved for future scoped access/auth features
-    return this.request(`/orders/${id}?uid=${uid}`);
+  async fetch(id: string, uid?: string) {
+    const query = uid ? `?uid=${uid}` : '';
+    return this.request<Order>(`/orders/${id}${query}`);
   }
 
   /**
-   * Fetch a single order by ID.
-   * 
+   * List attendees for an order.
+   *
    * @param id - The unique identifier of the order
    * @param uid - The unique user ID associated with the order (currently unused but reserved for future auth context)
-   * @returns A Promise resolving to the order object
+   * @returns A Promise resolving to the list of attendees
    * @throws Will throw an error if the request fails or the order is not found
    */
-  async attendees(id: string, uid: string) {
-    // uid is reserved for future scoped access/auth features
-    return this.request(`/orders/${id}/attendees?uid=${uid}`);
+  async attendees(id: string, uid?: string) {
+    const query = uid ? `?uid=${uid}` : '';
+    return this.request<Attendee[]>(`/orders/${id}/attendees${query}`);
   }
 
   /**
    * List orders with optional filters.
-   * 
-   * @param filters - Optional filters to apply when retrieving orders
-   * @returns A Promise resolving to an array of order summaries
+   *
+   * @param filters - Optional pagination and filter parameters
+   * @returns A Promise resolving to a paginated response with order summaries
    * @throws Will throw an error if the request fails
    */
-  async list(filters?: {
-    status?: string;
-    startDate?: string;
-    endDate?: string;
-    page?: number;
-    pageSize?: number;
-  }) {
-    const query = new URLSearchParams(filters as Record<string, string>).toString();
-    return this.request(`/orders${query ? `?${query}` : ''}`);
+  async list(filters?: PaginatedRequest<OrderListFilters>) {
+    return this.request<PaginatedResponse<Partial<Order>>>('/orders', paginatedOptions(filters));
   }
 
   /**

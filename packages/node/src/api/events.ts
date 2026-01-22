@@ -18,15 +18,14 @@ import { paginatedOptions } from '../http/request';
 export class EventsAPI extends CohostEndpoint {
 
   /**
-   * Fetch a list of all events.
-   * 
-   * @returns A Promise resolving to an array of event objects
+   * Fetch a paginated list of events.
+   *
+   * @param filters - Optional pagination and filter parameters
+   * @returns A Promise resolving to a paginated response with event profiles
    * @throws Will throw an error if the request fails
-   * 
-   * @todo Implement pagination and filtering options
    */
-  async list() {
-    return this.request<EventProfile[]>('/events');
+  async list(filters?: PaginatedRequest<any>) {
+    return this.request<PaginatedResponse<EventProfile>>('/events', paginatedOptions(filters));
   }
 
 
