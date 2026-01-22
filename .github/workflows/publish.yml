@@ -30,20 +30,18 @@ jobs:
       - name: Build all packages
         run: pnpm -r build
 
+      - name: Publish @cohostvip/cohost-types
+        working-directory: packages/types
+        run: npm publish --provenance --access public
+
       - name: Publish @cohostvip/cohost-auth
         working-directory: packages/auth
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @cohostvip/cohost-node
         working-directory: packages/node
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @cohostvip/cohost-react
         working-directory: packages/react
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
