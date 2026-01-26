@@ -132,7 +132,9 @@ const request = ({ token, baseUrl = apiBaseUrl, debug = false }: RequestProps): 
 
     if (!res.ok) {
       const message = typeof responseBody === "string" ? responseBody : JSON.stringify(responseBody);
-      console.error(`[Cohost SDK] Error(${res.status}): ${message}`, { url });
+      if (debug) {
+        console.error(`[Cohost SDK] Error(${res.status}): ${message}`, { url });
+      }
       throw new CohostError(message || res.statusText, {
         errorCode: res.statusText || "API_ERROR",
         statusCode: res.status,

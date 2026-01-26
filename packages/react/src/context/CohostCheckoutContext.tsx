@@ -34,12 +34,18 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
     children,
 }) => {
 
-    const { client } = useCohostClient();
+    const { client, debug } = useCohostClient();
     const [cartSession, setCartSession] = React.useState<CartSession | null>(null);
+
+    const logError = (message: string, error?: unknown) => {
+        if (debug) {
+            console.error(message, error);
+        }
+    };
 
     const assertCartSession = () => {
         if (!cartSession) {
-            console.error("CohostCheckoutProvider requires a cartSession");
+            logError("CohostCheckoutProvider requires a cartSession");
             throw new Error("CohostCheckoutProvider requires a cartSession");
         }
     }
@@ -52,7 +58,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             setCartSession(updatedCart);
 
         } catch (error) {
-            console.error("Error applying coupon:", error);
+            logError("Error applying coupon:", error);
             throw error;
         }
     }
@@ -66,7 +72,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             setCartSession(updatedCart);
 
         } catch (error) {
-            console.error("Error removing coupon:", error);
+            logError("Error removing coupon:", error);
             throw error;
         }
     }
@@ -85,7 +91,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
 
             return { itemId };
         } catch (error: any) {
-            console.error("Error joining group:", error);
+            logError("Error joining group:", error);
             return {
                 itemId: null,
                 error: {
@@ -103,7 +109,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             const updatedCart = await client.cart.updateItem(cartSessionId, { itemId, quantity, options });
             setCartSession(updatedCart);
         } catch (error) {
-            console.error("Error updating cart item:", error);
+            logError("Error updating cart item:", error);
         }
     }
 
@@ -127,7 +133,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
                 await updateItem(itemId, qty, options);
             }
         } catch (error) {
-            console.error("Error incrementing cart item:", error);
+            logError("Error incrementing cart item:", error);
         }
     };
 
@@ -147,7 +153,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
                 await updateItem(itemId, qty);
             }
         } catch (error) {
-            console.error("Error decrementing cart item:", error);
+            logError("Error decrementing cart item:", error);
         }
     };
 
@@ -158,7 +164,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             const updatedCart = await client.cart.update(cartSessionId, data);
             setCartSession(updatedCart);
         } catch (error) {
-            console.error("Error updating cart session:", error);
+            logError("Error updating cart session:", error);
         }
     };
 
@@ -175,7 +181,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             });
             setCartSession(updatedCart);
         } catch (error) {
-            console.error("Error setting customer:", error);
+            logError("Error setting customer:", error);
         }
     }
 
@@ -203,7 +209,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             const res = await client.cart.placeOrder(cartSessionId, {});
             return res;
         } catch (error) {
-            console.error("Error placing order:", error);
+            logError("Error placing order:", error);
         }
     }
 
@@ -215,14 +221,14 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
             const res = await client.cart.processPayment(cartSessionId, data);
             return res;
         } catch (error) {
-            console.error("Error processing payment:", error);
+            logError("Error processing payment:", error);
         }
     }
 
 
     useEffect(() => {
         if (!cartSessionId) {
-            console.error("CohostCheckoutProvider requires a cartSessionId");
+            logError("CohostCheckoutProvider requires a cartSessionId");
             return;
         }
         const fetchCartSession = async () => {
@@ -230,7 +236,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
                 const cart = await client.cart.get(cartSessionId);
                 setCartSession(cart);
             } catch (error) {
-                console.error("Error fetching cart session:", error);
+                logError("Error fetching cart session:", error);
 
                 // rethrow the error to be handled by the caller
                 throw error;

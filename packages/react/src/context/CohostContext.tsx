@@ -16,6 +16,7 @@ export type CohostProviderProps = {
 
 const CohostContext = createContext<{
     client: CohostClient;
+    debug: boolean;
 } | null>(null);
 
 export const CohostProvider: React.FC<CohostProviderProps> = ({
@@ -25,15 +26,16 @@ export const CohostProvider: React.FC<CohostProviderProps> = ({
     children,
 }) => {
     const client = providedClient ?? createCohostClient({ token: providedToken!, settings }); // assumes a factory fn in cohost-node
+    const debug = settings?.debug ?? false;
 
     return (
-        <CohostContext.Provider value={{ client }}>
+        <CohostContext.Provider value={{ client, debug }}>
             {children}
         </CohostContext.Provider>
     );
 };
 
-export const useCohostClient = (): { client: CohostClient } => {
+export const useCohostClient = (): { client: CohostClient; debug: boolean } => {
     const ctx = useContext(CohostContext);
     if (!ctx) throw new Error("useCohostClient must be used within a CohostProvider");
     return ctx;

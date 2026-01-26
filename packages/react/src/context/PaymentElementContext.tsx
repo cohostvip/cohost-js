@@ -24,7 +24,7 @@ const tokenizers: Record<string, Tokenizer> = {
 
 export const PaymentElementProvider: React.FC<PaymentElementProviderProps> = ({ children }) => {
     const { cartSession, cartSessionId } = useCohostCheckout();
-    const { client } = useCohostClient();
+    const { client, debug } = useCohostClient();
 
     const [paymentIntent, setPaymentIntent] = useState<any | null>(null);
     const [tokenizer, setTokenizer] = useState<Tokenizer | null>(null);
@@ -81,7 +81,9 @@ export const PaymentElementProvider: React.FC<PaymentElementProviderProps> = ({ 
                 setPaymentIntent(result);
             })
             .catch((error) => {
-                console.error("Error fetching payment intent:", error);
+                if (debug) {
+                    console.error("Error fetching payment intent:", error);
+                }
             })
             .finally(() => {
                 setIsLoading(false);
