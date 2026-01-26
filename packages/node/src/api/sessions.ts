@@ -97,13 +97,35 @@ export class SessionsAPI extends CohostEndpoint {
      * @param sessionId - The ID of the cart session
      * @param data - Data required for validation
      * @returns {CartSession} The validated cart session
-     * 
+     *
      * @throws Will throw an error if validation fails
      */
     async preValidate(sessionId: string, data: any) {
         return this.request<CartSession>(`/cart/sessions/${sessionId}/payment/pre-validate`, {
             method: 'POST',
             data: data,
+        });
+    }
+
+    /**
+     * Get or create the payment intent for a cart session.
+     *
+     * @param sessionId - The ID of the cart session
+     * @returns Payment intent details including provider-specific credentials
+     *
+     * @throws Will throw an error if the request fails
+     */
+    async getPaymentIntent(sessionId: string) {
+        return this.request<{
+            paymentIntentId: string;
+            client_secret?: string;
+            provider?: string;
+            publicClientKey?: string;
+            apiLoginId?: string;
+            amount?: number;
+            currency?: string;
+        }>(`/cart/sessions/${sessionId}/payment/payment-intent`, {
+            method: 'POST',
         });
     }
 
