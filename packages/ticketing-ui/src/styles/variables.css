@@ -1,0 +1,38 @@
+/**
+ * Ticketing UI CSS Variables
+ *
+ * These variables can be customized by consumers to match their branding.
+ * Default values are based on Cohost brand colors.
+ */
+
+:root {
+  /* Primary colors */
+  --ticketing-primary: #6366f1;
+  --ticketing-primary-hover: #4f46e5;
+  --ticketing-accent: #8b5cf6;
+
+  /* Background colors */
+  --ticketing-background: #ffffff;
+  --ticketing-surface: #f8fafc;
+  --ticketing-surface-hover: #f1f5f9;
+
+  /* Text colors */
+  --ticketing-text: #1e293b;
+  --ticketing-text-muted: #64748b;
+
+  /* Border colors */
+  --ticketing-border: #e2e8f0;
+
+  /* Status colors */
+  --ticketing-success: #22c55e;
+  --ticketing-error: #ef4444;
+  --ticketing-warning: #f59e0b;
+
+  /* Typography */
+  --ticketing-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Border radius tokens */
+  --ticketing-radius-sm: 0.25rem;
+  --ticketing-radius-md: 0.5rem;
+  --ticketing-radius-lg: 0.75rem;
+}
