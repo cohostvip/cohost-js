@@ -1,6 +1,6 @@
 {
   "name": "@cohostvip/cohost-types",
-  "version": "0.3.5",
+  "version": "0.3.7",
   "description": "TypeScript type definitions for the Cohost API",
   "main": "dist/index.js",
   "module": "dist/index.js",
