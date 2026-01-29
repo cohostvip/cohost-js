@@ -1,6 +1,6 @@
 {
   "name": "@cohostvip/ticketing-ui",
-  "version": "0.0.1",
+  "version": "0.3.7",
   "description": "React UI components for Cohost ticketing",
   "license": "ISC",
   "type": "module",
