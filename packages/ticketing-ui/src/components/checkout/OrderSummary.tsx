@@ -1,40 +1,110 @@
 import { FC } from 'react'
-import { useCohostCheckout } from '@cohostvip/cohost-react'
 import DisplayPrice from '../ui/DisplayPrice'
-import PromoCodeInput from './PromoCodeInput'
+import Button from '../ui/Button'
+
+export interface OrderSummaryItem {
+  id: string
+  name: string
+  quantity: number
+  totalPrice: string
+}
+
+export interface OrderSummaryCosts {
+  subtotal?: string
+  discount?: string
+  fee?: string
+  tax?: string
+  total?: string
+}
 
 export interface OrderSummaryProps {
+  /**
+   * Items in the order
+   */
+  items: OrderSummaryItem[]
+
+  /**
+   * Cost breakdown
+   */
+  costs: OrderSummaryCosts
+
+  /**
+   * Applied coupon codes
+   */
+  coupons?: string[]
+
+  /**
+   * Show promo code input
+   * @default false
+   */
+  showPromoInput?: boolean
+
+  /**
+   * Callback when promo code is applied
+   */
+  onApplyPromo?: (code: string) => Promise<void>
+
+  /**
+   * Show continue button
+   * @default false
+   */
   showContinueButton?: boolean
+
+  /**
+   * Callback when continue is clicked
+   */
   onContinue?: () => void
+
+  /**
+   * Disable continue button
+   * @default false
+   */
   continueDisabled?: boolean
+
+  /**
+   * Continue button text
+   * @default "Continue"
+   */
+  continueLabel?: string
+
+  /**
+   * Additional class names
+   */
   className?: string
 }
 
 /**
  * OrderSummary - Display order summary with line items, discounts, fees, and total
  *
- * Requires Cohost SDK context (CohostCheckoutProvider).
- *
  * @example
  * ```tsx
- * <CohostCheckoutProvider cartSessionId="...">
- *   <OrderSummary
- *     showContinueButton
- *     onContinue={() => nextStep()}
- *     continueDisabled={!isStepComplete}
- *   />
- * </CohostCheckoutProvider>
+ * <OrderSummary
+ *   items={[
+ *     { id: '1', name: 'General Admission', quantity: 2, totalPrice: 'USD,5000' }
+ *   ]}
+ *   costs={{
+ *     subtotal: 'USD,5000',
+ *     fee: 'USD,100',
+ *     tax: 'USD,510',
+ *     total: 'USD,5610'
+ *   }}
+ *   showContinueButton
+ *   onContinue={() => nextStep()}
+ * />
  * ```
  */
 const OrderSummary: FC<OrderSummaryProps> = ({
+  items,
+  costs,
+  coupons = [],
+  showPromoInput = false,
+  onApplyPromo,
   showContinueButton = false,
   onContinue,
   continueDisabled = false,
+  continueLabel = 'Continue',
   className = '',
 }) => {
-  const { cartSession, applyCoupon } = useCohostCheckout()
-  const items = cartSession!.items
-
   // Helper function to check if a price is free (0)
   const isFree = (price?: string) => {
     if (!price) return true
@@ -42,11 +112,11 @@ const OrderSummary: FC<OrderSummaryProps> = ({
     return Number(amount) === 0
   }
 
-  const isOrderFree =
-    isFree(cartSession!.costs?.subtotal) && isFree(cartSession!.costs?.total)
+  const isOrderFree = isFree(costs.subtotal) && isFree(costs.total)
 
   // Check if cart is empty
-  const isCartEmpty = !items.some((item) => item.quantity > 0)
+  const activeItems = items.filter((item) => item.quantity > 0)
+  const isCartEmpty = activeItems.length === 0
 
   if (isCartEmpty) {
     return (
@@ -55,7 +125,7 @@ const OrderSummary: FC<OrderSummaryProps> = ({
       >
         <div className="p-6 text-center">
           <svg
-            className="w-12 h-12 text-ticketing-muted mx-auto mb-4"
+            className="w-12 h-12 text-ticketing-text-muted mx-auto mb-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -67,7 +137,7 @@ const OrderSummary: FC<OrderSummaryProps> = ({
               d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
             />
           </svg>
-          <p className="text-ticketing-muted">Your cart is empty</p>
+          <p className="text-ticketing-text-muted">Your cart is empty</p>
         </div>
       </div>
     )
@@ -86,81 +156,72 @@ const OrderSummary: FC<OrderSummaryProps> = ({
       <div className="p-6">
         {/* Selected Tickets */}
         <div className="mb-6">
-          <h4 className="text-sm font-medium text-ticketing-muted mb-3">
+          <h4 className="text-sm font-medium text-ticketing-text-muted mb-3">
             Selected Tickets
           </h4>
           <div className="space-y-3">
-            {items
-              .filter((item) => item.quantity > 0)
-              .map((item) => (
-                <div key={item.id} className="flex justify-between text-sm">
-                  <div>
-                    <span className="text-ticketing-text">
-                      {item.offering?.name || 'Ticket'}
-                    </span>
-                    <span className="text-ticketing-muted ml-2">
-                      x {item.quantity}
-                    </span>
-                  </div>
-                  <DisplayPrice
-                    price={item.costs!.total}
-                    className="text-ticketing-text"
-                  />
+            {activeItems.map((item) => (
+              <div key={item.id} className="flex justify-between text-sm">
+                <div>
+                  <span className="text-ticketing-text">{item.name}</span>
+                  <span className="text-ticketing-text-muted ml-2">
+                    x {item.quantity}
+                  </span>
                 </div>
-              ))}
+                <DisplayPrice
+                  price={item.totalPrice}
+                  className="text-ticketing-text"
+                />
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Promo Code - Only show if order has costs */}
-        {!isOrderFree && (
-          <PromoCodeInput
-            onApply={async (code) => {
-              await applyCoupon(code)
-            }}
-          />
-        )}
 
         {/* Price Breakdown - Only show if order has costs */}
         {!isOrderFree && (
           <div className="space-y-3 mb-6">
             <div className="flex justify-between text-sm">
-              <span className="text-ticketing-muted">Subtotal</span>
+              <span className="text-ticketing-text-muted">Subtotal</span>
               <DisplayPrice
-                price={cartSession!.costs?.subtotal}
+                price={costs.subtotal}
                 className="text-ticketing-text"
               />
             </div>
-            {(cartSession!.coupons?.length || 0) > 0 && (
+            {coupons.length > 0 && costs.discount && (
               <div className="flex justify-between text-sm">
                 <span className="text-ticketing-success">Discount</span>
                 <DisplayPrice
-                  price={cartSession!.costs?.discount}
+                  price={costs.discount}
                   className="text-ticketing-success"
                   leftDecorator="-"
                 />
               </div>
             )}
-            <div className="flex justify-between text-sm">
-              <span className="text-ticketing-muted">Fees</span>
-              <DisplayPrice
-                price={cartSession!.costs?.fee}
-                className="text-ticketing-text"
-              />
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-ticketing-muted">Tax</span>
-              <DisplayPrice
-                price={cartSession!.costs?.tax}
-                className="text-ticketing-text"
-              />
-            </div>
+            {costs.fee && !isFree(costs.fee) && (
+              <div className="flex justify-between text-sm">
+                <span className="text-ticketing-text-muted">Fees</span>
+                <DisplayPrice
+                  price={costs.fee}
+                  className="text-ticketing-text"
+                />
+              </div>
+            )}
+            {costs.tax && !isFree(costs.tax) && (
+              <div className="flex justify-between text-sm">
+                <span className="text-ticketing-text-muted">Tax</span>
+                <DisplayPrice
+                  price={costs.tax}
+                  className="text-ticketing-text"
+                />
+              </div>
+            )}
             <div className="border-t border-ticketing-border pt-3">
               <div className="flex justify-between">
                 <span className="text-lg font-semibold text-ticketing-text">
                   Total
                 </span>
                 <DisplayPrice
-                  price={cartSession!.costs?.total}
+                  price={costs.total}
                   className="text-lg font-semibold text-ticketing-text"
                 />
               </div>
@@ -170,13 +231,14 @@ const OrderSummary: FC<OrderSummaryProps> = ({
 
         {/* Continue Button */}
         {showContinueButton && onContinue && (
-          <button
+          <Button
             onClick={onContinue}
             disabled={continueDisabled}
-            className="w-full bg-ticketing-primary hover:bg-ticketing-primary-hover disabled:bg-ticketing-muted disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
+            fullWidth
+            size="lg"
           >
-            Continue
-          </button>
+            {continueLabel}
+          </Button>
         )}
       </div>
     </div>
