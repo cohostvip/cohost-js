@@ -1,0 +1,93 @@
+// PromoCodeInput Component Styles
+// Standalone promo code input with loading, success, and error states
+
+.ticketing-promo-code-input {
+  margin-bottom: 1.5rem;
+
+  // Label
+  &__label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ticketing-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  // Input container
+  &__container {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  // Input field
+  &__input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--ticketing-border);
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    background-color: var(--ticketing-background);
+    color: var(--ticketing-text);
+    font-size: 1rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &::placeholder {
+      color: var(--ticketing-text-muted);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--ticketing-primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    // Error state
+    &--error {
+      border-color: var(--ticketing-error);
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+
+  // Action button
+  &__button {
+    padding: 0.5rem 1rem;
+    background-color: var(--ticketing-surface);
+    color: var(--ticketing-text);
+    border: none;
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: var(--ticketing-surface-hover);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Error message
+  &__error {
+    font-size: 0.875rem;
+    color: var(--ticketing-error);
+    margin-top: 0.5rem;
+  }
+
+  // Success message
+  &__success {
+    font-size: 0.875rem;
+    color: var(--ticketing-success);
+    margin-top: 0.5rem;
+  }
+}

@@ -64,34 +64,34 @@ const EventSummary: FC<EventSummaryProps> = ({
   return (
     <div
       className={clsx(
-        'bg-ticketing-surface border border-ticketing-border rounded-lg overflow-hidden',
+        'ticketing-event-summary',
         className
       )}
     >
-      <div className="p-4 border-b border-ticketing-border">
-        <h3 className="font-semibold text-ticketing-text">Event</h3>
+      <div className="ticketing-event-summary__header">
+        <h3 className="ticketing-event-summary__header-title">Event</h3>
       </div>
-      <div className="p-4 flex gap-4">
+      <div className="ticketing-event-summary__content">
         {imageUrl && (
-          <div className="flex-shrink-0">
+          <div className="ticketing-event-summary__image">
             <img
               src={imageUrl}
               alt={name}
-              className="w-20 h-20 object-cover rounded-lg"
+              className="ticketing-event-summary__image-img"
             />
           </div>
         )}
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-ticketing-text truncate">{name}</h4>
-          <p className="text-sm text-ticketing-text-muted mt-1">
+        <div className="ticketing-event-summary__details">
+          <h4 className="ticketing-event-summary__event-name">{name}</h4>
+          <p className="ticketing-event-summary__date">
             {date}
             {time && ` at ${time}`}
           </p>
           {venue && (
-            <p className="text-sm text-ticketing-text-muted mt-1">{venue}</p>
+            <p className="ticketing-event-summary__venue">{venue}</p>
           )}
           {address && (
-            <p className="text-xs text-ticketing-text-muted">{address}</p>
+            <p className="ticketing-event-summary__address">{address}</p>
           )}
         </div>
       </div>

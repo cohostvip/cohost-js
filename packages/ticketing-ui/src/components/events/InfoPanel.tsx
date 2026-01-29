@@ -50,14 +50,14 @@ const InfoPanel: FC<InfoPanelProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx('flex items-start gap-3', className)}>
-      <div className="flex-shrink-0 w-5 h-5 text-ticketing-text-muted mt-0.5">
+    <div className={clsx('ticketing-info-panel', className)}>
+      <div className="ticketing-info-panel__icon">
         {icon}
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="text-ticketing-text font-medium">{children}</div>
+      <div className="ticketing-info-panel__content">
+        <div className="ticketing-info-panel__text">{children}</div>
         {subtitle && (
-          <div className="text-sm text-ticketing-text-muted mt-0.5">
+          <div className="ticketing-info-panel__subtitle">
             {subtitle}
           </div>
         )}

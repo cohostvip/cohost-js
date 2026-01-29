@@ -3,7 +3,6 @@ import { defineConfig } from 'tsup'
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    'tailwind.preset': 'tailwind.preset.ts',
   },
   format: ['esm'],
   dts: true,
@@ -13,7 +12,6 @@ export default defineConfig({
     'react-dom',
     '@cohostvip/cohost-react',
     '@cohostvip/cohost-node',
-    'tailwindcss',
   ],
   sourcemap: true,
   target: 'es2022',

@@ -47,18 +47,18 @@ const CheckoutStepper: FC<CheckoutStepperProps> = ({
   }
 
   return (
-    <div className="mb-8 px-8 h-8">
-      <nav aria-label="Progress">
+    <div className="ticketing-checkout-stepper">
+      <nav aria-label="Progress" className="ticketing-checkout-stepper__nav">
         <div className="relative">
           {/* Background line spanning full width */}
           <div
-            className="absolute top-2 left-2 right-2 h-0.5 bg-ticketing-border"
+            className="ticketing-checkout-stepper__background-line"
             aria-hidden="true"
           />
 
           {/* Progress line */}
           <div
-            className="absolute top-2 left-2 h-0.5 bg-ticketing-primary transition-all duration-300"
+            className="ticketing-checkout-stepper__progress-line"
             style={{
               width:
                 steps.length > 1
@@ -68,27 +68,27 @@ const CheckoutStepper: FC<CheckoutStepperProps> = ({
             aria-hidden="true"
           />
 
-          <ol className="flex items-center justify-between w-full relative">
+          <ol className="ticketing-checkout-stepper__steps">
             {steps.map((step) => {
               const isCompleted = step.id < currentStepId
               const isActive = step.id === currentStepId
               const isClickable = allowClickableSteps && isCompleted && onStepClick
 
               return (
-                <li key={step.id} className="relative flex-shrink-0">
+                <li key={step.id} className="ticketing-checkout-stepper__step">
                   {isCompleted ? (
                     <button
                       onClick={() => handleStepClick(step.id)}
                       disabled={!isClickable}
-                      className={`relative w-4 h-4 flex items-center justify-center bg-ticketing-primary rounded-full transition-colors z-10 ${
+                      className={`ticketing-checkout-stepper__indicator ticketing-checkout-stepper__indicator--completed ${
                         isClickable
-                          ? 'hover:bg-ticketing-primary-hover cursor-pointer'
-                          : 'cursor-default'
+                          ? ''
+                          : 'ticketing-checkout-stepper__indicator--non-clickable'
                       }`}
                       aria-label={`Go to ${step.title}`}
                     >
                       <svg
-                        className="w-2.5 h-2.5 text-white"
+                        className="ticketing-checkout-stepper__indicator-icon"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -102,25 +102,25 @@ const CheckoutStepper: FC<CheckoutStepperProps> = ({
                     </button>
                   ) : isActive ? (
                     <div
-                      className="relative w-4 h-4 flex items-center justify-center bg-ticketing-background border-2 border-ticketing-primary rounded-full z-10"
+                      className="ticketing-checkout-stepper__indicator ticketing-checkout-stepper__indicator--active"
                       aria-current="step"
                     >
-                      <span className="h-1 w-1 bg-ticketing-primary rounded-full" />
+                      <span className="ticketing-checkout-stepper__indicator-dot" />
                       <span className="sr-only">{step.title}</span>
                     </div>
                   ) : (
-                    <div className="group relative w-4 h-4 flex items-center justify-center bg-ticketing-background border-2 border-ticketing-border rounded-full hover:border-ticketing-muted z-10">
-                      <span className="h-1 w-1 bg-transparent rounded-full group-hover:bg-ticketing-muted" />
+                    <div className="ticketing-checkout-stepper__indicator ticketing-checkout-stepper__indicator--inactive">
+                      <span className="ticketing-checkout-stepper__indicator-dot ticketing-checkout-stepper__indicator-dot--hover" />
                       <span className="sr-only">{step.title}</span>
                     </div>
                   )}
 
-                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 text-center w-20 sm:w-24">
-                    <p className="text-xs font-medium text-ticketing-text truncate">
+                  <div className="ticketing-checkout-stepper__labels">
+                    <p className="ticketing-checkout-stepper__title">
                       {step.title}
                     </p>
                     {step.description && (
-                      <p className="text-xs text-ticketing-muted truncate">
+                      <p className="ticketing-checkout-stepper__description">
                         {step.description}
                       </p>
                     )}

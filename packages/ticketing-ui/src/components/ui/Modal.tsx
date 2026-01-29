@@ -118,14 +118,6 @@ const Modal: FC<ModalProps> = ({
 
   if (!isOpen) return null
 
-  const sizeClasses = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
-    full: 'max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)]',
-  }
-
   const handleBackdropClick = () => {
     if (closeOnBackdropClick) {
       onClose()
@@ -134,16 +126,15 @@ const Modal: FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"
+      className="ticketing-modal__backdrop"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
     >
       <div
         className={clsx(
-          'relative w-full bg-ticketing-surface rounded-lg shadow-xl',
-          'max-h-[calc(100vh-2rem)] flex flex-col',
-          sizeClasses[size],
+          'ticketing-modal__container',
+          `ticketing-modal__container--${size}`,
           className
         )}
         onClick={(e) => e.stopPropagation()}
@@ -152,10 +143,10 @@ const Modal: FC<ModalProps> = ({
         {showCloseButton && !header && (
           <button
             onClick={onClose}
-            className="absolute right-3 top-3 z-10 p-1 text-ticketing-text-muted hover:text-ticketing-text transition-colors"
+            className="ticketing-modal__close-button"
             aria-label="Close modal"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -163,17 +154,17 @@ const Modal: FC<ModalProps> = ({
 
         {/* Header */}
         {header && (
-          <div className="flex items-start justify-between gap-4 px-6 py-4 border-b border-ticketing-border">
-            <div className="flex-1 text-lg font-semibold text-ticketing-text">
+          <div className="ticketing-modal__header">
+            <div className="ticketing-modal__header-content">
               {header}
             </div>
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="p-1 text-ticketing-text-muted hover:text-ticketing-text transition-colors -mr-1"
+                className="ticketing-modal__header-close"
                 aria-label="Close modal"
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -183,15 +174,18 @@ const Modal: FC<ModalProps> = ({
 
         {/* Content */}
         <div className={clsx(
-          'flex-1 overflow-y-auto',
-          header || footer ? 'px-6 py-4' : 'p-6'
+          'ticketing-modal__content',
+          {
+            'ticketing-modal__content--with-sections': header || footer,
+            'ticketing-modal__content--full': !header && !footer,
+          }
         )}>
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-ticketing-border">
+          <div className="ticketing-modal__footer">
             {footer}
           </div>
         )}

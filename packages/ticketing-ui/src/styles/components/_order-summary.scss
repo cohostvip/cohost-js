@@ -1,0 +1,182 @@
+// OrderSummary Component Styles
+// Display order summary with line items, discounts, fees, and total
+
+.ticketing-order-summary {
+  background-color: var(--ticketing-surface);
+  border-radius: var(--ticketing-radius-lg, 0.5rem);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--ticketing-border);
+
+  // Header section
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--ticketing-border);
+  }
+
+  // Header title
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Content section
+  &__content {
+    padding: 1.5rem;
+  }
+
+  // Empty state
+  &__empty {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  // Empty icon
+  &__empty-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--ticketing-text-muted);
+    margin: 0 auto 1rem;
+    flex-shrink: 0;
+  }
+
+  // Empty message
+  &__empty-message {
+    color: var(--ticketing-text-muted);
+  }
+
+  // Section (tickets, costs)
+  &__section {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Section label
+  &__section-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ticketing-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  // Items list
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  // Item row
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+
+  // Item name column
+  &__item-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    min-width: 0;
+    flex: 1;
+  }
+
+  // Item primary name
+  &__item-primary {
+    color: var(--ticketing-text);
+  }
+
+  // Item quantity
+  &__item-quantity {
+    color: var(--ticketing-text-muted);
+    margin-left: 0.25rem;
+  }
+
+  // Item price
+  &__item-price {
+    color: var(--ticketing-text);
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  // Price breakdown section
+  &__breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  // Breakdown row
+  &__breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 0.875rem;
+  }
+
+  // Breakdown label
+  &__breakdown-label {
+    color: var(--ticketing-text-muted);
+    min-width: 0;
+
+    &--success {
+      color: var(--ticketing-success);
+    }
+  }
+
+  // Breakdown value
+  &__breakdown-value {
+    color: var(--ticketing-text);
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-align: right;
+
+    &--success {
+      color: var(--ticketing-success);
+    }
+  }
+
+  // Total section
+  &__total-section {
+    border-top: 1px solid var(--ticketing-border);
+    padding-top: 0.75rem;
+  }
+
+  // Total row
+  &__total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  // Total label
+  &__total-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Total value
+  &__total-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--ticketing-text);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  // Button area
+  &__button-area {
+    margin-top: 1.5rem;
+  }
+}

@@ -75,72 +75,72 @@ const OrderTotalsSummary: FC<OrderTotalsSummaryProps> = ({
     label,
     width = 'w-16',
   }) => (
-    <div className="flex justify-between text-sm">
-      <span className="text-ticketing-text-muted">{label}</span>
-      <div className={clsx('h-4 bg-ticketing-border rounded', width)} />
+    <div className="ticketing-order-totals-summary__line">
+      <span className="ticketing-order-totals-summary__line-label">{label}</span>
+      <div className={clsx('ticketing-order-totals-summary__redacted-bar', width)} />
     </div>
   )
 
   return (
     <div
       className={clsx(
-        'bg-ticketing-surface border border-ticketing-border rounded-lg overflow-hidden',
+        'ticketing-order-totals-summary',
         className
       )}
     >
-      <div className="p-4 border-b border-ticketing-border">
-        <h3 className="font-semibold text-ticketing-text">Order Summary</h3>
+      <div className="ticketing-order-totals-summary__header">
+        <h3 className="ticketing-order-totals-summary__header-title">Order Summary</h3>
       </div>
-      <div className="p-4 space-y-3">
+      <div className="ticketing-order-totals-summary__content">
         {redacted ? (
           <>
             <RedactedLine label="Subtotal" width="w-20" />
             <RedactedLine label="Fees" width="w-12" />
             <RedactedLine label="Tax" width="w-14" />
-            <div className="flex justify-between pt-3 border-t border-ticketing-border">
-              <span className="font-semibold text-ticketing-text">Total</span>
-              <div className="h-5 w-24 bg-ticketing-border rounded" />
+            <div className="ticketing-order-totals-summary__total">
+              <span className="ticketing-order-totals-summary__total-label">Total</span>
+              <div className="ticketing-order-totals-summary__redacted-bar ticketing-order-totals-summary__redacted-bar--large" />
             </div>
           </>
         ) : (
           <>
             {subtotal && !isFree(subtotal) && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-text-muted">Subtotal</span>
-                <DisplayPrice price={subtotal} className="text-ticketing-text" />
+              <div className="ticketing-order-totals-summary__line">
+                <span className="ticketing-order-totals-summary__line-label">Subtotal</span>
+                <DisplayPrice price={subtotal} className="ticketing-order-totals-summary__line-value" />
               </div>
             )}
 
             {discount && !isFree(discount) && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-success">Discount</span>
+              <div className={clsx('ticketing-order-totals-summary__line', 'ticketing-order-totals-summary__line--discount')}>
+                <span className="ticketing-order-totals-summary__line-label">Discount</span>
                 <DisplayPrice
                   price={discount}
-                  className="text-ticketing-success"
+                  className="ticketing-order-totals-summary__line-value"
                   leftDecorator="-"
                 />
               </div>
             )}
 
             {fees && !isFree(fees) && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-text-muted">Fees</span>
-                <DisplayPrice price={fees} className="text-ticketing-text" />
+              <div className="ticketing-order-totals-summary__line">
+                <span className="ticketing-order-totals-summary__line-label">Fees</span>
+                <DisplayPrice price={fees} className="ticketing-order-totals-summary__line-value" />
               </div>
             )}
 
             {tax && !isFree(tax) && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-text-muted">Tax</span>
-                <DisplayPrice price={tax} className="text-ticketing-text" />
+              <div className="ticketing-order-totals-summary__line">
+                <span className="ticketing-order-totals-summary__line-label">Tax</span>
+                <DisplayPrice price={tax} className="ticketing-order-totals-summary__line-value" />
               </div>
             )}
 
-            <div className="flex justify-between pt-3 border-t border-ticketing-border">
-              <span className="font-semibold text-ticketing-text">Total</span>
+            <div className="ticketing-order-totals-summary__total">
+              <span className="ticketing-order-totals-summary__total-label">Total</span>
               <DisplayPrice
                 price={total}
-                className="font-semibold text-ticketing-text"
+                className="ticketing-order-totals-summary__total-value"
               />
             </div>
           </>

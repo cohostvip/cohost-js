@@ -59,26 +59,21 @@ const TagsList: FC<TagsListProps> = ({
 }) => {
   if (tags.length === 0) return null
 
-  const sizeClasses = {
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-3 py-1 text-sm',
-    lg: 'px-4 py-1.5 text-base',
-  }
-
-  const baseClasses = clsx(
-    'inline-flex items-center rounded-full',
-    'bg-ticketing-surface border border-ticketing-border',
-    'text-ticketing-text transition-colors',
-    sizeClasses[size]
-  )
-
-  const interactiveClasses = 'hover:bg-ticketing-surface-hover cursor-pointer'
+  const sizeClass = {
+    sm: 'ticketing-tag--sm',
+    md: 'ticketing-tag--md',
+    lg: 'ticketing-tag--lg',
+  }[size]
 
   return (
-    <div className={clsx('flex flex-wrap gap-2', className)}>
+    <div className={clsx('ticketing-tags-list', className)}>
       {tags.map((tag, index) => {
         const isInteractive = !!tag.url || !!onClick
-        const classes = clsx(baseClasses, isInteractive && interactiveClasses)
+        const tagClasses = clsx(
+          'ticketing-tag',
+          sizeClass,
+          isInteractive && 'ticketing-tag--interactive'
+        )
 
         const handleClick = () => {
           if (onClick) {
@@ -91,7 +86,7 @@ const TagsList: FC<TagsListProps> = ({
             <a
               key={`${tag.text}-${index}`}
               href={tag.url}
-              className={classes}
+              className={clsx(tagClasses, 'ticketing-tag__link')}
               onClick={onClick ? handleClick : undefined}
             >
               {tag.text}
@@ -104,7 +99,7 @@ const TagsList: FC<TagsListProps> = ({
             <button
               key={`${tag.text}-${index}`}
               type="button"
-              className={classes}
+              className={clsx(tagClasses, 'ticketing-tag__button')}
               onClick={handleClick}
             >
               {tag.text}
@@ -113,7 +108,7 @@ const TagsList: FC<TagsListProps> = ({
         }
 
         return (
-          <span key={`${tag.text}-${index}`} className={classes}>
+          <span key={`${tag.text}-${index}`} className={tagClasses}>
             {tag.text}
           </span>
         )

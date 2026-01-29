@@ -1,0 +1,128 @@
+// TicketCard Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-ticket-card {
+  border-radius: var(--ticketing-radius-lg);
+  border: 1px solid var(--ticketing-border);
+  background-color: var(--ticketing-surface);
+  padding: 1rem;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--ticketing-primary);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &--sold-out {
+    opacity: 0.6;
+
+    &:hover {
+      border-color: var(--ticketing-border);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+  }
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__left-section {
+    flex: 1;
+  }
+
+  &__title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__title {
+    font-weight: 500;
+    color: var(--ticketing-text);
+  }
+
+  &__badge {
+    border-radius: 9999px;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  &__badge--sold-out {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  &__badge--limited {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+  }
+
+  &__price {
+    margin-top: 0.25rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  &__price--sold-out {
+    color: var(--ticketing-text-muted);
+  }
+
+  &__price--available {
+    color: var(--ticketing-accent);
+  }
+
+  &__price-note {
+    margin-left: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--ticketing-text-muted);
+  }
+
+  &__details-button {
+    font-size: 0.875rem;
+    color: var(--ticketing-accent);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: text-decoration 0.15s ease;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__description {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--ticketing-border);
+    padding-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--ticketing-text-muted);
+
+    // Prose styles for HTML content
+    &.prose {
+      font-size: 0.875rem;
+
+      p {
+        margin: 0.5rem 0;
+      }
+
+      a {
+        color: var(--ticketing-accent);
+        text-decoration: underline;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}

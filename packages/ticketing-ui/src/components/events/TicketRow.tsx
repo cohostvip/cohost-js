@@ -70,9 +70,9 @@ const TicketRow: FC<TicketRowProps> = ({
   return (
     <div
       className={clsx(
-        'flex items-start justify-between gap-4 py-4',
-        soldOut && 'opacity-60',
-        onClick && 'cursor-pointer',
+        'ticketing-ticket-row',
+        soldOut && 'ticketing-ticket-row--sold-out',
+        onClick && 'ticketing-ticket-row--clickable',
         className
       )}
       onClick={onClick}
@@ -89,35 +89,35 @@ const TicketRow: FC<TicketRowProps> = ({
           : undefined
       }
     >
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <h4 className="font-medium text-ticketing-text">{name}</h4>
+      <div className="ticketing-ticket-row__left-content">
+        <div className="ticketing-ticket-row__title-group">
+          <h4 className="ticketing-ticket-row__title">{name}</h4>
           {soldOut && (
-            <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-xs font-medium text-red-400">
+            <span className="ticketing-ticket-row__badge ticketing-ticket-row__badge--sold-out">
               Sold Out
             </span>
           )}
         </div>
-        <div className="mt-1">
+        <div className="ticketing-ticket-row__price-section">
           <DisplayPrice
             price={price}
             className={clsx(
-              'text-sm',
-              soldOut ? 'text-ticketing-text-muted' : 'text-ticketing-accent'
+              'ticketing-ticket-row__price',
+              soldOut ? 'ticketing-ticket-row__price--sold-out' : 'ticketing-ticket-row__price--available'
             )}
             freeLabel={
-              <span className="text-sm text-ticketing-accent">Free</span>
+              <span className="ticketing-ticket-row__price ticketing-ticket-row__price--available">Free</span>
             }
           />
         </div>
         {description && (
-          <p className="mt-1 text-xs text-ticketing-text-muted line-clamp-2">
+          <p className="ticketing-ticket-row__description">
             {description}
           </p>
         )}
       </div>
       {rightContent && (
-        <div className="flex-shrink-0">{rightContent}</div>
+        <div className="ticketing-ticket-row__right-content">{rightContent}</div>
       )}
     </div>
   )

@@ -1,0 +1,37 @@
+// DisplayPrice Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-display-price {
+  // Container
+  &__wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  // Price value
+  &__price {
+    font-weight: 600;
+
+    // Sale price styling
+    &--sale {
+      color: var(--ticketing-error);
+    }
+  }
+
+  // Original price (strikethrough)
+  &__original-price {
+    margin-left: 0.5rem;
+    color: var(--ticketing-text-muted);
+    text-decoration: line-through;
+    font-size: 0.875rem;
+  }
+
+  // Decorators
+  &__left-decorator {
+    margin-right: 0.25rem;
+  }
+
+  &__right-decorator {
+    margin-left: 0.25rem;
+  }
+}

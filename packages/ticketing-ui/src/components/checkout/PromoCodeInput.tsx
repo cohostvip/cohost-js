@@ -52,11 +52,11 @@ const PromoCodeInput: FC<PromoCodeInputProps> = ({
   }
 
   return (
-    <div className={`mb-6 ${className}`}>
-      <label className="block text-sm font-medium text-ticketing-muted mb-2">
+    <div className={`ticketing-promo-code-input ${className}`}>
+      <label className="ticketing-promo-code-input__label">
         Promo Code
       </label>
-      <div className="flex space-x-2">
+      <div className="ticketing-promo-code-input__container">
         <input
           type="text"
           value={code}
@@ -70,17 +70,17 @@ const PromoCodeInput: FC<PromoCodeInputProps> = ({
             }
           }}
           placeholder="Enter code"
-          className={`flex-1 px-3 py-2 border rounded-lg bg-ticketing-background text-ticketing-text focus:ring-2 focus:ring-ticketing-primary focus:border-transparent transition-colors ${
+          className={`ticketing-promo-code-input__input ${
             error
-              ? 'border-ticketing-error'
-              : 'border-ticketing-border'
+              ? 'ticketing-promo-code-input__input--error'
+              : ''
           }`}
           disabled={applied || disabled}
         />
         {applied ? (
           <button
             onClick={handleClear}
-            className="px-4 py-2 bg-ticketing-surface text-ticketing-text rounded-lg hover:bg-ticketing-surface-hover transition-colors"
+            className="ticketing-promo-code-input__button"
             aria-label="Clear promo code"
           >
             Clear
@@ -89,19 +89,19 @@ const PromoCodeInput: FC<PromoCodeInputProps> = ({
           <button
             onClick={handleApply}
             disabled={!code.trim() || isApplying || disabled}
-            className="px-4 py-2 bg-ticketing-surface text-ticketing-text rounded-lg hover:bg-ticketing-surface-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ticketing-promo-code-input__button"
           >
             {isApplying ? 'Applying...' : 'Apply'}
           </button>
         )}
       </div>
       {error && (
-        <p className="text-sm text-ticketing-error mt-2">
+        <p className="ticketing-promo-code-input__error">
           {error}
         </p>
       )}
       {applied && !error && (
-        <p className="text-sm text-ticketing-success mt-2">
+        <p className="ticketing-promo-code-input__success">
           ✓ Promo code applied!
         </p>
       )}

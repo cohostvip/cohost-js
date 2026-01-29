@@ -1,0 +1,68 @@
+// Card Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-card {
+  border-radius: var(--ticketing-radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  // Variants
+  &--default {
+    background-color: var(--ticketing-surface);
+    border: 1px solid var(--ticketing-border);
+  }
+
+  &--elevated {
+    background-color: var(--ticketing-surface);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  }
+
+  &--outlined {
+    background-color: var(--ticketing-background);
+    border: 1px solid var(--ticketing-border);
+  }
+
+  // Clickable modifier
+  &--clickable {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Padding modifiers - applies to content when no header/footer
+  &--padding-none > &__content {
+    padding: 0;
+  }
+
+  &--padding-sm > &__content {
+    padding: var(--ticketing-space-sm);
+  }
+
+  &--padding-md > &__content {
+    padding: var(--ticketing-space-md);
+  }
+
+  &--padding-lg > &__content {
+    padding: var(--ticketing-space-lg);
+  }
+
+  // Card sections
+  &__header {
+    padding: var(--ticketing-space-md);
+    border-bottom: 1px solid var(--ticketing-border);
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  &__content {
+    padding: var(--ticketing-space-md);
+    color: var(--ticketing-text);
+  }
+
+  &__footer {
+    padding: var(--ticketing-space-md);
+    border-top: 1px solid var(--ticketing-border);
+  }
+}

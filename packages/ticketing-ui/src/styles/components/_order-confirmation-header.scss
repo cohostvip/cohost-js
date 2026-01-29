@@ -1,0 +1,39 @@
+// OrderConfirmationHeader Component Styles
+// Header with order number and thank you message
+
+.ticketing-order-confirmation-header {
+  text-align: center;
+
+  &__icon-wrapper {
+    color: var(--ticketing-success);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__icon {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    color: var(--ticketing-text);
+    margin-bottom: 0.5rem;
+  }
+
+  &__order-number {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--ticketing-text-muted);
+    margin-bottom: 1rem;
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--ticketing-text-muted);
+  }
+}

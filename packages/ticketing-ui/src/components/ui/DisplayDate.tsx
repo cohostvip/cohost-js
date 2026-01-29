@@ -141,7 +141,7 @@ const DisplayDate: FC<DisplayDateProps> = ({
 
   // Inline mode - simple text display
   if (mode === 'inline') {
-    return <span className={className}>{getFormattedDate()}</span>
+    return <span className={clsx('ticketing-display-date--inline', className)}>{getFormattedDate()}</span>
   }
 
   // Block mode - with calendar icon
@@ -175,22 +175,22 @@ const DisplayDate: FC<DisplayDateProps> = ({
   const startTime = timeFormatter.format(dateObj)
 
   return (
-    <div className={clsx('flex items-center gap-4', className)}>
+    <div className={clsx('ticketing-display-date--block', className)}>
       {/* Calendar Icon */}
-      <div className="flex-shrink-0 w-16 h-16 bg-ticketing-surface border-2 border-ticketing-border rounded-lg overflow-hidden">
-        <div className="bg-ticketing-primary text-white text-xs font-semibold text-center py-1">
+      <div className="ticketing-display-date__calendar">
+        <div className="ticketing-display-date__calendar-month">
           {month}
         </div>
-        <div className="text-ticketing-text text-2xl font-bold text-center py-1">
+        <div className="ticketing-display-date__calendar-day">
           {day}
         </div>
       </div>
 
       {/* Date & Time Info */}
-      <div className="text-sm flex flex-col gap-1">
-        <div className="text-ticketing-text font-medium">{formattedDate}</div>
+      <div className="ticketing-display-date__info">
+        <div className="ticketing-display-date__info-date">{formattedDate}</div>
         {showTime && (
-          <div className="text-ticketing-text-muted">
+          <div className="ticketing-display-date__info-time">
             {timeRange || startTime}
           </div>
         )}

@@ -1,0 +1,71 @@
+// DisplayDate Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-display-date {
+  // Inline mode
+  &--inline {
+    display: inline;
+  }
+
+  // Block mode
+  &--block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  // Calendar icon (block mode only)
+  &__calendar {
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--ticketing-surface);
+    border: 2px solid var(--ticketing-border);
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Calendar month section
+  &__calendar-month {
+    background-color: var(--ticketing-primary);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.25rem;
+  }
+
+  // Calendar day section
+  &__calendar-day {
+    color: var(--ticketing-text);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.25rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Date info (block mode only)
+  &__info {
+    font-size: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  // Date text
+  &__info-date {
+    color: var(--ticketing-text);
+    font-weight: 500;
+  }
+
+  // Time text
+  &__info-time {
+    color: var(--ticketing-text-muted);
+  }
+}

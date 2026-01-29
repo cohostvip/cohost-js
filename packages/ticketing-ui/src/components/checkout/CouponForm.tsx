@@ -98,10 +98,10 @@ const CouponForm: FC<CouponFormProps> = ({
   if (appliedCoupon && !isEditing) {
     return (
       <div className={className}>
-        <div className="flex items-center justify-between p-3 bg-ticketing-success/10 border border-ticketing-success/20 rounded-lg">
-          <div className="flex items-center gap-2">
+        <div className="ticketing-coupon-form__applied">
+          <div className="ticketing-coupon-form__applied-content">
             <svg
-              className="w-5 h-5 text-ticketing-success"
+              className="ticketing-coupon-form__applied-icon"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -113,12 +113,12 @@ const CouponForm: FC<CouponFormProps> = ({
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <div>
-              <span className="font-medium text-ticketing-text">
+            <div className="ticketing-coupon-form__applied-text">
+              <span className="ticketing-coupon-form__applied-code">
                 {appliedCoupon.code}
               </span>
               {appliedCoupon.discount && (
-                <span className="text-sm text-ticketing-success ml-2">
+                <span className="ticketing-coupon-form__applied-discount">
                   ({appliedCoupon.discount})
                 </span>
               )}
@@ -127,7 +127,7 @@ const CouponForm: FC<CouponFormProps> = ({
           <button
             type="button"
             onClick={onRemove || handleEdit}
-            className="text-sm text-ticketing-primary hover:text-ticketing-primary-hover font-medium"
+            className="ticketing-coupon-form__action-button"
           >
             {onRemove ? 'Remove' : 'Edit'}
           </button>
@@ -139,7 +139,7 @@ const CouponForm: FC<CouponFormProps> = ({
   // Show input form
   return (
     <div className={className}>
-      <div className="flex gap-2">
+      <div className="ticketing-coupon-form__inputs">
         <input
           type="text"
           value={code}
@@ -155,7 +155,7 @@ const CouponForm: FC<CouponFormProps> = ({
           }}
           placeholder="Enter promo code"
           disabled={disabled || isApplying}
-          className="flex-1 px-3 py-2 border rounded-lg bg-ticketing-background text-ticketing-text placeholder:text-ticketing-text-muted focus:outline-none focus:ring-2 focus:ring-ticketing-primary/50 focus:border-ticketing-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-ticketing-border"
+          className="ticketing-coupon-form__input"
         />
         <Button
           variant="secondary"
@@ -172,7 +172,7 @@ const CouponForm: FC<CouponFormProps> = ({
         )}
       </div>
       {error && (
-        <p className="text-sm text-ticketing-error mt-2">{error}</p>
+        <p className="ticketing-coupon-form__error">{error}</p>
       )}
     </div>
   )

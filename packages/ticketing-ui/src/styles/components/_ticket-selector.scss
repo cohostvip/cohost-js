@@ -1,0 +1,333 @@
+// TicketSelector Component Styles
+// Display and select tickets with quantities
+
+.ticketing-ticket-selector {
+  background-color: var(--ticketing-surface);
+  border-radius: var(--ticketing-radius-lg, 0.5rem);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--ticketing-border);
+
+  // Header section
+  &__header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--ticketing-border);
+  }
+
+  // Header title
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Header description
+  &__description {
+    font-size: 0.875rem;
+    color: var(--ticketing-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  // Content section
+  &__content {
+    padding: 1.5rem;
+  }
+
+  // Items list
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  // Single ticket item
+  &__item {
+    border: 1px solid var(--ticketing-border);
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    padding: 1rem;
+    transition: background-color 0.15s ease;
+
+    &--sold-out {
+      opacity: 0.6;
+    }
+  }
+
+  // Item header (flex container)
+  &__item-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  // Item info (left side)
+  &__item-info {
+    flex: 1;
+  }
+
+  // Item title area
+  &__item-title-area {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  // Item name
+  &__item-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ticketing-text);
+  }
+
+  // Sold out badge
+  &__sold-out-badge {
+    border-radius: 9999px;
+    background-color: rgba(239, 68, 68, 0.2);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(248, 113, 113, 1);
+  }
+
+  // Item details link
+  &__details-link {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--ticketing-primary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--ticketing-primary-hover);
+    }
+  }
+
+  // Item price
+  &__item-price {
+    margin-top: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Item price decorator
+  &__item-price-decorator {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--ticketing-text-muted);
+    margin-left: 0.25rem;
+  }
+
+  // Item controls (right side)
+  &__item-controls {
+    margin-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  // Item subtotal area
+  &__item-subtotal {
+    text-align: right;
+  }
+
+  // Item subtotal label
+  &__item-subtotal-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--ticketing-text-muted);
+  }
+
+  // Item subtotal value
+  &__item-subtotal-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Item constraints (max/min quantity)
+  &__item-constraints {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--ticketing-text-muted);
+  }
+
+  // Empty state
+  &__empty {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  // Empty icon
+  &__empty-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--ticketing-text-muted);
+    margin: 0 auto 1rem;
+    flex-shrink: 0;
+  }
+
+  // Empty message
+  &__empty-message {
+    color: var(--ticketing-text-muted);
+  }
+}
+
+// Ticket Details Modal
+.ticketing-ticket-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+
+  // Backdrop
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: default;
+  }
+
+  // Modal container
+  &__content {
+    position: relative;
+    background-color: var(--ticketing-surface);
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    max-width: 56rem;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  // Modal header
+  &__header {
+    position: sticky;
+    top: 0;
+    background-color: var(--ticketing-surface);
+    border-bottom: 1px solid var(--ticketing-border);
+    padding: 1.5rem;
+  }
+
+  // Modal header flex
+  &__header-flex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  // Modal header info
+  &__header-info {
+    flex: 1;
+  }
+
+  // Modal title
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Modal price
+  &__price-container {
+    margin-top: 0.5rem;
+  }
+
+  // Modal close button
+  &__close-button {
+    margin-left: 1rem;
+    color: var(--ticketing-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--ticketing-text);
+    }
+  }
+
+  // Modal close icon
+  &__close-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  // Modal body
+  &__body {
+    padding: 1.5rem;
+  }
+
+  // Modal description
+  &__description {
+    font-size: 0.875rem;
+    color: var(--ticketing-text-muted);
+
+    // Prose styling for HTML content
+    & p {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    & strong {
+      color: var(--ticketing-text);
+      font-weight: 600;
+    }
+  }
+
+  // Modal info box
+  &__info-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: var(--ticketing-background);
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+  }
+
+  // Modal info text
+  &__info-text {
+    font-size: 0.875rem;
+    color: var(--ticketing-text-muted);
+  }
+
+  // Modal info label
+  &__info-label {
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  // Modal footer
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--ticketing-surface);
+    border-top: 1px solid var(--ticketing-border);
+    padding: 1.5rem;
+  }
+
+  // Modal close button (footer)
+  &__footer-button {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: var(--ticketing-primary);
+    color: white;
+    border: none;
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--ticketing-primary-hover);
+    }
+  }
+}

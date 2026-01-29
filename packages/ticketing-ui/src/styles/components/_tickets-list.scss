@@ -1,0 +1,186 @@
+// TicketsList Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-tickets-list {
+  // Root container
+}
+
+.ticketing-tickets-list__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ticketing-text);
+  margin-bottom: 0.5rem;
+}
+
+.ticketing-tickets-list__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+// Ticket group section
+.ticketing-ticket-group {
+  // Individual group container
+}
+
+.ticketing-ticket-group__header {
+  border-bottom: 1px solid var(--ticketing-border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ticketing-ticket-group__name {
+  font-weight: 600;
+  color: var(--ticketing-text);
+}
+
+.ticketing-ticket-group__description {
+  margin-top: 0;
+  font-size: 0.875rem;
+  color: var(--ticketing-text-muted);
+}
+
+.ticketing-ticket-group__items {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticketing-ticket-group__item {
+  border-top: 1px solid var(--ticketing-border);
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+// Ticket row (inner component used by TicketsList)
+.ticketing-ticket-item {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  &--sold-out {
+    opacity: 0.6;
+  }
+}
+
+.ticketing-ticket-item__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ticketing-ticket-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ticketing-ticket-item__name-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ticketing-ticket-item__name {
+  font-weight: 500;
+  color: var(--ticketing-text);
+}
+
+.ticketing-ticket-item__badge {
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ticketing-ticket-item__badge--sold-out {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: var(--ticketing-error);
+}
+
+.ticketing-ticket-item__badge--limited {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: var(--ticketing-warning);
+}
+
+.ticketing-ticket-item__price-row {
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ticketing-ticket-item__price {
+  font-size: 0.875rem;
+
+  &--available {
+    color: var(--ticketing-primary);
+  }
+
+  &--sold-out {
+    color: var(--ticketing-text-muted);
+  }
+}
+
+.ticketing-ticket-item__price-note {
+  font-size: 0.75rem;
+  color: var(--ticketing-text-muted);
+}
+
+.ticketing-ticket-item__quantity {
+  flex-shrink: 0;
+}
+
+.ticketing-ticket-item__description {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--ticketing-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ticketing-ticket-item__view-more {
+  margin-top: 0.125rem;
+  font-size: 0.75rem;
+  color: var(--ticketing-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: text-decoration 0.15s ease;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Empty state
+.ticketing-tickets-list__empty {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.ticketing-tickets-list__empty-icon {
+  margin-left: auto;
+  margin-right: auto;
+  width: 3rem;
+  height: 3rem;
+  color: var(--ticketing-text-muted);
+}
+
+.ticketing-tickets-list__empty-message {
+  margin-top: 1rem;
+  color: var(--ticketing-text-muted);
+}
+
+// Get tickets button container
+.ticketing-tickets-list__button-container {
+  padding-top: 1rem;
+}
+
+.ticketing-tickets-list__button {
+  width: 100%;
+}

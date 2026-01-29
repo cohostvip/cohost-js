@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { clsx } from 'clsx'
 import Button from './Button'
 
 export interface QuantitySelectorProps {
@@ -75,14 +76,8 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
     lg: 'h-10 w-10 p-0 text-lg',
   }
 
-  const valueWidthClasses = {
-    sm: 'w-6 text-sm',
-    md: 'w-8',
-    lg: 'w-10 text-lg',
-  }
-
   return (
-    <div className="flex items-center gap-2">
+    <div className="ticketing-quantity-selector__wrapper">
       <Button
         size="sm"
         variant="secondary"
@@ -93,7 +88,7 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
       >
         -
       </Button>
-      <span className={`${valueWidthClasses[size]} text-center font-medium text-ticketing-text`}>
+      <span className={clsx('ticketing-quantity-selector__display', `ticketing-quantity-selector__display--${size}`)}>
         {value}
       </span>
       <Button

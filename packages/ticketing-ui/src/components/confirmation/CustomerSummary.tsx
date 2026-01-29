@@ -59,36 +59,36 @@ const CustomerSummary: FC<CustomerSummaryProps> = ({
     iconPath,
     width = 'w-32',
   }) => (
-    <div className="flex items-center gap-3">
-      <div className="w-8 h-8 bg-ticketing-border rounded-full" />
-      <div className={clsx('h-4 bg-ticketing-border rounded', width)} />
+    <div className="ticketing-customer-summary__info-row">
+      <div className="ticketing-customer-summary__redacted-icon" />
+      <div className={clsx('ticketing-customer-summary__redacted-bar', width)} />
     </div>
   )
 
   return (
     <div
       className={clsx(
-        'bg-ticketing-surface border border-ticketing-border rounded-lg overflow-hidden',
+        'ticketing-customer-summary',
         className
       )}
     >
-      <div className="p-4 border-b border-ticketing-border">
-        <h3 className="font-semibold text-ticketing-text">Customer</h3>
+      <div className="ticketing-customer-summary__header">
+        <h3 className="ticketing-customer-summary__header-title">Customer</h3>
       </div>
-      <div className="p-4">
+      <div className="ticketing-customer-summary__content">
         {redacted ? (
-          <div className="space-y-3">
+          <div className="ticketing-customer-summary__info-list">
             <RedactedRow iconPath="" width="w-28" />
             <RedactedRow iconPath="" width="w-40" />
             <RedactedRow iconPath="" width="w-32" />
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="ticketing-customer-summary__info-list">
             {name && (
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-ticketing-background rounded-full flex items-center justify-center flex-shrink-0 border border-ticketing-border">
+              <div className="ticketing-customer-summary__info-row">
+                <div className="ticketing-customer-summary__info-icon">
                   <svg
-                    className="w-4 h-4 text-ticketing-text-muted"
+                    className="ticketing-customer-summary__info-icon-svg"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -101,14 +101,14 @@ const CustomerSummary: FC<CustomerSummaryProps> = ({
                     />
                   </svg>
                 </div>
-                <span className="text-ticketing-text">{name}</span>
+                <span className="ticketing-customer-summary__info-text">{name}</span>
               </div>
             )}
             {email && (
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-ticketing-background rounded-full flex items-center justify-center flex-shrink-0 border border-ticketing-border">
+              <div className="ticketing-customer-summary__info-row">
+                <div className="ticketing-customer-summary__info-icon">
                   <svg
-                    className="w-4 h-4 text-ticketing-text-muted"
+                    className="ticketing-customer-summary__info-icon-svg"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -121,14 +121,14 @@ const CustomerSummary: FC<CustomerSummaryProps> = ({
                     />
                   </svg>
                 </div>
-                <span className="text-ticketing-text">{email}</span>
+                <span className="ticketing-customer-summary__info-text">{email}</span>
               </div>
             )}
             {phone && (
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-ticketing-background rounded-full flex items-center justify-center flex-shrink-0 border border-ticketing-border">
+              <div className="ticketing-customer-summary__info-row">
+                <div className="ticketing-customer-summary__info-icon">
                   <svg
-                    className="w-4 h-4 text-ticketing-text-muted"
+                    className="ticketing-customer-summary__info-icon-svg"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -141,7 +141,7 @@ const CustomerSummary: FC<CustomerSummaryProps> = ({
                     />
                   </svg>
                 </div>
-                <span className="text-ticketing-text">{phone}</span>
+                <span className="ticketing-customer-summary__info-text">{phone}</span>
               </div>
             )}
           </div>

@@ -63,33 +63,20 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
     const inputId = id || `radio-${Math.random().toString(36).slice(2, 9)}`
     const hasError = !!error
 
-    const sizeClasses = {
-      sm: 'w-4 h-4',
-      md: 'w-5 h-5',
-      lg: 'w-6 h-6',
-    }
-
-    const labelSizeClasses = {
-      sm: 'text-sm',
-      md: 'text-base',
-      lg: 'text-lg',
-    }
-
     return (
-      <div className="flex flex-col">
-        <div className="flex items-start gap-3">
-          <div className="flex items-center h-6">
+      <div className="ticketing-radio__wrapper">
+        <div className="ticketing-radio__group">
+          <div className="ticketing-radio__input-container">
             <input
               ref={ref}
               type="radio"
               id={inputId}
               className={clsx(
-                sizeClasses[size],
-                'rounded-full border bg-ticketing-background text-ticketing-primary',
-                'focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-ticketing-primary/50',
-                'transition-colors cursor-pointer',
-                'disabled:opacity-50 disabled:cursor-not-allowed',
-                hasError ? 'border-ticketing-error' : 'border-ticketing-border',
+                'ticketing-radio__input',
+                `ticketing-radio__input--${size}`,
+                {
+                  'ticketing-radio__input--error': hasError,
+                },
                 className
               )}
               aria-invalid={hasError}
@@ -103,8 +90,8 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
             <label
               htmlFor={inputId}
               className={clsx(
-                'text-ticketing-text cursor-pointer select-none',
-                labelSizeClasses[size]
+                'ticketing-radio__label',
+                `ticketing-radio__label--${size}`
               )}
             >
               {label}
@@ -114,7 +101,7 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
         {hasError && (
           <p
             id={`${inputId}-error`}
-            className="mt-1.5 text-sm text-ticketing-error ml-8"
+            className="ticketing-radio__error"
           >
             {error}
           </p>
@@ -122,7 +109,7 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
         {!hasError && helperText && (
           <p
             id={`${inputId}-helper`}
-            className="mt-1 text-sm text-ticketing-text-muted ml-8"
+            className="ticketing-radio__helper"
           >
             {helperText}
           </p>

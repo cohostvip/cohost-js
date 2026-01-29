@@ -41,51 +41,29 @@ const Card: FC<CardProps> = ({
   children,
   ...props
 }) => {
-  const paddingClasses = {
-    none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-  }
-
-  const variantClasses = {
-    default: 'bg-ticketing-surface border border-ticketing-border',
-    elevated: 'bg-ticketing-surface shadow-lg',
-    outlined: 'bg-ticketing-background border-2 border-ticketing-border',
-  }
-
   return (
     <div
       className={clsx(
-        'rounded-lg transition-all',
-        variantClasses[variant],
+        'ticketing-card',
+        `ticketing-card--${variant}`,
+        `ticketing-card--padding-${padding}`,
         {
-          'hover:shadow-xl hover:scale-[1.02] cursor-pointer': clickable,
+          'ticketing-card--clickable': clickable,
         },
         className
       )}
       {...props}
     >
       {header && (
-        <div
-          className={clsx(
-            'border-b border-ticketing-border',
-            padding === 'none' ? 'p-4' : paddingClasses[padding]
-          )}
-        >
+        <div className="ticketing-card__header" style={{ padding: padding === 'none' ? '1rem' : undefined }}>
           {header}
         </div>
       )}
 
-      <div className={clsx(paddingClasses[padding])}>{children}</div>
+      <div className="ticketing-card__content">{children}</div>
 
       {footer && (
-        <div
-          className={clsx(
-            'border-t border-ticketing-border',
-            padding === 'none' ? 'p-4' : paddingClasses[padding]
-          )}
-        >
+        <div className="ticketing-card__footer" style={{ padding: padding === 'none' ? '1rem' : undefined }}>
           {footer}
         </div>
       )}

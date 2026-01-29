@@ -68,11 +68,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const hasError = !!error
 
     return (
-      <div className={clsx('flex flex-col', fullWidth && 'w-full')}>
+      <div className={clsx('ticketing-input__wrapper', fullWidth && 'ticketing-input__wrapper--full-width')}>
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-ticketing-text mb-1.5"
+            className="ticketing-input__label"
           >
             {label}
           </label>
@@ -81,25 +81,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={clsx(
-            // Base styles
-            'rounded-lg border bg-ticketing-background text-ticketing-text placeholder:text-ticketing-text-muted',
-            'focus:outline-none focus:ring-2 focus:ring-offset-0',
-            'transition-colors',
-            'disabled:opacity-50 disabled:cursor-not-allowed',
-
-            // Size variants
+            'ticketing-input__field',
+            `ticketing-input__field--${size}`,
             {
-              'px-3 py-1.5 text-sm': size === 'sm',
-              'px-4 py-2 text-base': size === 'md',
-              'px-4 py-3 text-lg': size === 'lg',
+              'ticketing-input__field--error': hasError,
+              'ticketing-input__field--full-width': fullWidth,
             },
-
-            // Error/normal state
-            hasError
-              ? 'border-ticketing-error focus:ring-ticketing-error/50'
-              : 'border-ticketing-border focus:ring-ticketing-primary/50 focus:border-ticketing-primary',
-
-            fullWidth && 'w-full',
             className
           )}
           aria-invalid={hasError}
@@ -111,7 +98,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {hasError && (
           <p
             id={`${inputId}-error`}
-            className="mt-1.5 text-sm text-ticketing-error"
+            className="ticketing-input__error"
           >
             {error}
           </p>
@@ -119,7 +106,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {!hasError && helperText && (
           <p
             id={`${inputId}-helper`}
-            className="mt-1.5 text-sm text-ticketing-text-muted"
+            className="ticketing-input__helper"
           >
             {helperText}
           </p>

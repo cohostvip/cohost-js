@@ -50,28 +50,28 @@ const TicketsSummary: FC<TicketsSummaryProps> = ({ tickets, className }) => {
   return (
     <div
       className={clsx(
-        'bg-ticketing-surface border border-ticketing-border rounded-lg overflow-hidden',
+        'ticketing-tickets-summary',
         className
       )}
     >
-      <div className="p-4 border-b border-ticketing-border">
-        <h3 className="font-semibold text-ticketing-text">Tickets</h3>
+      <div className="ticketing-tickets-summary__header">
+        <h3 className="ticketing-tickets-summary__header-title">Tickets</h3>
       </div>
-      <div className="divide-y divide-ticketing-border">
+      <div className="ticketing-tickets-summary__list">
         {tickets.map((ticket, index) => (
           <div
             key={`${ticket.name}-${index}`}
-            className="p-4 flex items-center justify-between"
+            className="ticketing-tickets-summary__item"
           >
-            <div>
-              <span className="text-ticketing-text">{ticket.name}</span>
-              <span className="text-ticketing-text-muted ml-2">
+            <div className="ticketing-tickets-summary__item-info">
+              <span className="ticketing-tickets-summary__item-name">{ticket.name}</span>
+              <span className="ticketing-tickets-summary__item-quantity">
                 x {ticket.quantity}
               </span>
             </div>
             <DisplayPrice
               price={ticket.totalPrice}
-              className="font-medium text-ticketing-text"
+              className="ticketing-tickets-summary__item-price"
             />
           </div>
         ))}

@@ -48,34 +48,34 @@ const PaymentSummary: FC<PaymentSummaryProps> = ({
   return (
     <div
       className={clsx(
-        'bg-ticketing-surface border border-ticketing-border rounded-lg overflow-hidden',
+        'ticketing-payment-summary',
         className
       )}
     >
-      <div className="p-4 border-b border-ticketing-border">
-        <h3 className="font-semibold text-ticketing-text">Payment</h3>
+      <div className="ticketing-payment-summary__header">
+        <h3 className="ticketing-payment-summary__header-title">Payment</h3>
       </div>
-      <div className="p-4">
+      <div className="ticketing-payment-summary__content">
         {redacted ? (
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-7 bg-ticketing-border rounded" />
-            <div className="flex-1 space-y-2">
-              <div className="h-4 w-32 bg-ticketing-border rounded" />
-              <div className="h-3 w-24 bg-ticketing-border rounded" />
+          <div className="ticketing-payment-summary__payment-row">
+            <div className="ticketing-payment-summary__redacted-card" />
+            <div className="ticketing-payment-summary__payment-info">
+              <div className="ticketing-payment-summary__redacted-bar ticketing-payment-summary__redacted-bar--primary" />
+              <div className="ticketing-payment-summary__redacted-bar ticketing-payment-summary__redacted-bar--secondary" />
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-7 bg-ticketing-background rounded flex items-center justify-center border border-ticketing-border">
+          <div className="ticketing-payment-summary__payment-row">
+            <div className="ticketing-payment-summary__card-icon">
               <svg
-                className="w-6 h-4 text-ticketing-text-muted"
+                className="ticketing-payment-summary__card-icon-svg"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
               </svg>
             </div>
-            <span className="text-ticketing-text">
+            <span className="ticketing-payment-summary__payment-method">
               {paymentMethod || 'Payment method on file'}
             </span>
           </div>

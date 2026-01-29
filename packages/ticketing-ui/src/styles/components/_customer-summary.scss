@@ -1,0 +1,74 @@
+// CustomerSummary Component Styles
+// Customer information for order confirmation
+
+.ticketing-customer-summary {
+  background-color: var(--ticketing-surface);
+  border: 1px solid var(--ticketing-border);
+  border-radius: var(--ticketing-radius-lg);
+  overflow: hidden;
+
+  &__header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--ticketing-border);
+  }
+
+  &__header-title {
+    font-weight: 600;
+    color: var(--ticketing-text);
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  &__content {
+    padding: 1rem;
+  }
+
+  &__info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__info-icon {
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--ticketing-background);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--ticketing-border);
+  }
+
+  &__info-icon-svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--ticketing-text-muted);
+  }
+
+  &__info-text {
+    color: var(--ticketing-text);
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  &__redacted-icon {
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--ticketing-border);
+    border-radius: 9999px;
+  }
+
+  &__redacted-bar {
+    height: 1rem;
+    background-color: var(--ticketing-border);
+    border-radius: var(--ticketing-radius-md);
+  }
+}

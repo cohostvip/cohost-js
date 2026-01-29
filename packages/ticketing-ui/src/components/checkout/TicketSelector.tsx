@@ -28,26 +28,26 @@ const TicketDetailsModal: FC<TicketDetailsModalProps> = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="ticketing-ticket-modal">
       {/* Backdrop */}
       <button
         type="button"
-        className="absolute inset-0 bg-black/50 cursor-default"
+        className="ticketing-ticket-modal__backdrop"
         onClick={onClose}
         onKeyDown={(e) => e.key === 'Escape' && onClose()}
         aria-label="Close modal"
       />
 
       {/* Modal */}
-      <div className="relative bg-ticketing-surface rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="ticketing-ticket-modal__content">
         {/* Header */}
-        <div className="sticky top-0 bg-ticketing-surface border-b border-ticketing-border p-6">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold text-ticketing-text">
+        <div className="ticketing-ticket-modal__header">
+          <div className="ticketing-ticket-modal__header-flex">
+            <div className="ticketing-ticket-modal__header-info">
+              <h3 className="ticketing-ticket-modal__title">
                 {item.name}
               </h3>
-              <div className="mt-2">
+              <div className="ticketing-ticket-modal__price-container">
                 <DisplayPrice
                   price={item.price}
                   className="text-lg font-semibold text-ticketing-text"
@@ -61,11 +61,11 @@ const TicketDetailsModal: FC<TicketDetailsModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="ml-4 text-ticketing-text-muted hover:text-ticketing-text transition-colors"
+              className="ticketing-ticket-modal__close-button"
               aria-label="Close"
             >
               <svg
-                className="w-6 h-6"
+                className="ticketing-ticket-modal__close-icon"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -82,19 +82,19 @@ const TicketDetailsModal: FC<TicketDetailsModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="ticketing-ticket-modal__body">
           {item.description && (
             <div
-              className="prose prose-sm max-w-none text-ticketing-text-muted"
+              className="ticketing-ticket-modal__description"
               dangerouslySetInnerHTML={{ __html: item.description }}
             />
           )}
 
           {/* Additional Info */}
           {item.maxQuantity !== undefined && item.maxQuantity < 10 && (
-            <div className="mt-6 p-4 bg-ticketing-background rounded-lg">
-              <p className="text-sm text-ticketing-text-muted">
-                <strong className="text-ticketing-text">
+            <div className="ticketing-ticket-modal__info-box">
+              <p className="ticketing-ticket-modal__info-text">
+                <strong className="ticketing-ticket-modal__info-label">
                   Maximum Quantity:
                 </strong>{' '}
                 {item.maxQuantity} per order
@@ -103,9 +103,9 @@ const TicketDetailsModal: FC<TicketDetailsModalProps> = ({
           )}
 
           {item.minQuantity !== undefined && item.minQuantity > 1 && (
-            <div className="mt-4 p-4 bg-ticketing-background rounded-lg">
-              <p className="text-sm text-ticketing-text-muted">
-                <strong className="text-ticketing-text">
+            <div className="ticketing-ticket-modal__info-box">
+              <p className="ticketing-ticket-modal__info-text">
+                <strong className="ticketing-ticket-modal__info-label">
                   Minimum Quantity:
                 </strong>{' '}
                 {item.minQuantity}
@@ -115,10 +115,10 @@ const TicketDetailsModal: FC<TicketDetailsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-ticketing-surface border-t border-ticketing-border p-6">
+        <div className="ticketing-ticket-modal__footer">
           <button
             onClick={onClose}
-            className="w-full px-4 py-2 bg-ticketing-primary text-white rounded-lg hover:bg-ticketing-primary-hover transition-colors font-medium"
+            className="ticketing-ticket-modal__footer-button"
           >
             Close
           </button>
@@ -177,38 +177,36 @@ const TicketSelector: FC<TicketSelectorProps> = ({
 
   return (
     <>
-      <div
-        className={`bg-ticketing-surface rounded-lg shadow-sm border border-ticketing-border ${className}`}
-      >
-        <div className="p-6 border-b border-ticketing-border">
-          <h3 className="text-lg font-semibold text-ticketing-text">
+      <div className={`ticketing-ticket-selector ${className}`}>
+        <div className="ticketing-ticket-selector__header">
+          <h3 className="ticketing-ticket-selector__title">
             Select Tickets
           </h3>
-          <p className="text-sm text-ticketing-text-muted mt-1">
+          <p className="ticketing-ticket-selector__description">
             Choose the number of tickets you&apos;d like to purchase
           </p>
         </div>
 
-        <div className="p-6">
-          <div className="space-y-6">
+        <div className="ticketing-ticket-selector__content">
+          <div className="ticketing-ticket-selector__items">
             {items.map((item) => {
               const isSoldOut = item.soldOut || item.maxQuantity === 0
 
               return (
                 <div
                   key={item.id}
-                  className={`border border-ticketing-border rounded-lg p-4 ${
-                    isSoldOut ? 'opacity-60' : ''
+                  className={`ticketing-ticket-selector__item ${
+                    isSoldOut ? 'ticketing-ticket-selector__item--sold-out' : ''
                   }`}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-base font-medium text-ticketing-text">
+                  <div className="ticketing-ticket-selector__item-header">
+                    <div className="ticketing-ticket-selector__item-info">
+                      <div className="ticketing-ticket-selector__item-title-area">
+                        <h4 className="ticketing-ticket-selector__item-name">
                           {item.name}
                         </h4>
                         {isSoldOut && (
-                          <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-xs font-medium text-red-400">
+                          <span className="ticketing-ticket-selector__sold-out-badge">
                             Sold Out
                           </span>
                         )}
@@ -216,17 +214,17 @@ const TicketSelector: FC<TicketSelectorProps> = ({
                       {item.description && (
                         <button
                           onClick={() => setSelectedItem(item)}
-                          className="mt-1 text-sm text-ticketing-primary hover:text-ticketing-primary-hover transition-colors font-medium"
+                          className="ticketing-ticket-selector__details-link"
                         >
                           See Details
                         </button>
                       )}
-                      <div className="mt-2">
+                      <div className="ticketing-ticket-selector__item-price">
                         <DisplayPrice
                           price={item.price}
                           className="text-lg font-semibold text-ticketing-text"
                           rightDecorator={
-                            <span className="text-sm font-normal text-ticketing-text-muted ml-1">
+                            <span className="ticketing-ticket-selector__item-price-decorator">
                               per ticket
                             </span>
                           }
@@ -235,7 +233,7 @@ const TicketSelector: FC<TicketSelectorProps> = ({
                       </div>
                     </div>
 
-                    <div className="ml-6 flex flex-col items-end space-y-3">
+                    <div className="ticketing-ticket-selector__item-controls">
                       {/* Quantity Selector */}
                       <QuantitySelector
                         value={item.quantity}
@@ -246,13 +244,13 @@ const TicketSelector: FC<TicketSelectorProps> = ({
                         disabled={isSoldOut}
                       />
                       {item.quantity > 0 && item.totalPrice && (
-                        <div className="text-right">
-                          <span className="text-sm text-ticketing-text-muted block">
+                        <div className="ticketing-ticket-selector__item-subtotal">
+                          <span className="ticketing-ticket-selector__item-subtotal-label">
                             Subtotal
                           </span>
                           <DisplayPrice
                             price={item.totalPrice}
-                            className="text-lg font-semibold text-ticketing-text"
+                            className="ticketing-ticket-selector__item-subtotal-value"
                           />
                         </div>
                       )}
@@ -261,7 +259,7 @@ const TicketSelector: FC<TicketSelectorProps> = ({
 
                   {/* Show offering constraints if any */}
                   {item.maxQuantity !== undefined && item.maxQuantity < 10 && !isSoldOut && (
-                    <div className="mt-3 text-xs text-ticketing-text-muted">
+                    <div className="ticketing-ticket-selector__item-constraints">
                       Maximum {item.maxQuantity} per order
                     </div>
                   )}
@@ -271,9 +269,9 @@ const TicketSelector: FC<TicketSelectorProps> = ({
           </div>
 
           {items.length === 0 && (
-            <div className="text-center py-8">
+            <div className="ticketing-ticket-selector__empty">
               <svg
-                className="w-12 h-12 text-ticketing-text-muted mx-auto mb-4"
+                className="ticketing-ticket-selector__empty-icon"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -285,7 +283,7 @@ const TicketSelector: FC<TicketSelectorProps> = ({
                   d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                 />
               </svg>
-              <p className="text-ticketing-text-muted">No tickets available</p>
+              <p className="ticketing-ticket-selector__empty-message">No tickets available</p>
             </div>
           )}
         </div>

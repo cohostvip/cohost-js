@@ -1,0 +1,132 @@
+// Modal Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-modal {
+  // Backdrop overlay
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  // Modal container
+  &__container {
+    position: relative;
+    width: 100%;
+    background-color: var(--ticketing-surface);
+    border-radius: var(--ticketing-radius-lg, 0.5rem);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    max-height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Size modifiers
+  &__container--sm {
+    max-width: 24rem;
+  }
+
+  &__container--md {
+    max-width: 28rem;
+  }
+
+  &__container--lg {
+    max-width: 32rem;
+  }
+
+  &__container--xl {
+    max-width: 36rem;
+  }
+
+  &__container--full {
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+  }
+
+  // Close button (standalone)
+  &__close-button {
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    z-index: 10;
+    padding: 0.25rem;
+    color: var(--ticketing-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--ticketing-text);
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  // Header section
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--ticketing-border);
+  }
+
+  &__header-content {
+    flex: 1;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ticketing-text);
+  }
+
+  &__header-close {
+    padding: 0.25rem;
+    color: var(--ticketing-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    margin-right: -0.25rem;
+
+    &:hover {
+      color: var(--ticketing-text);
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  // Content section
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__content--with-sections {
+    padding: 1.5rem;
+  }
+
+  &__content--full {
+    padding: 1.5rem;
+  }
+
+  // Footer section
+  &__footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--ticketing-border);
+  }
+}

@@ -137,23 +137,27 @@ const DisplayPrice: FC<DisplayPriceProps> = ({
   }
 
   return (
-    <div className={className}>
-      {leftDecorator}
+    <div className={`ticketing-display-price__wrapper ${className || ''}`}>
+      {leftDecorator && (
+        <span className="ticketing-display-price__left-decorator">
+          {leftDecorator}
+        </span>
+      )}
       <span
-        className={
-          showAsSale || formattedOriginalPrice
-            ? 'text-ticketing-error font-semibold'
-            : ''
-        }
+        className={showAsSale || formattedOriginalPrice ? 'ticketing-display-price__price--sale' : 'ticketing-display-price__price'}
       >
         {formattedPrice}
       </span>
       {formattedOriginalPrice && (
-        <span className="ml-2 text-ticketing-text-muted line-through text-sm">
+        <span className="ticketing-display-price__original-price">
           {formattedOriginalPrice}
         </span>
       )}
-      {rightDecorator}
+      {rightDecorator && (
+        <span className="ticketing-display-price__right-decorator">
+          {rightDecorator}
+        </span>
+      )}
     </div>
   )
 }

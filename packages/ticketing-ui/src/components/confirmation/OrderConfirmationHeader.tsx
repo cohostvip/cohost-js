@@ -49,7 +49,7 @@ const OrderConfirmationHeader: FC<OrderConfirmationHeaderProps> = ({
 }) => {
   const defaultIcon = (
     <svg
-      className="w-16 h-16"
+      className="ticketing-order-confirmation-header__icon"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -64,16 +64,16 @@ const OrderConfirmationHeader: FC<OrderConfirmationHeaderProps> = ({
   )
 
   return (
-    <div className={clsx('text-center', className)}>
-      <div className="text-ticketing-success mb-4 flex justify-center">
+    <div className={clsx('ticketing-order-confirmation-header', className)}>
+      <div className="ticketing-order-confirmation-header__icon-wrapper">
         {icon || defaultIcon}
       </div>
-      <h1 className="text-2xl font-bold text-ticketing-text mb-2">{title}</h1>
-      <p className="text-ticketing-text-muted mb-4">
+      <h1 className="ticketing-order-confirmation-header__title">{title}</h1>
+      <p className="ticketing-order-confirmation-header__order-number">
         Order #{orderNumber}
       </p>
       {subtitle && (
-        <p className="text-sm text-ticketing-text-muted">{subtitle}</p>
+        <p className="ticketing-order-confirmation-header__subtitle">{subtitle}</p>
       )}
     </div>
   )

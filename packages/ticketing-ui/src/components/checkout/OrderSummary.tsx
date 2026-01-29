@@ -120,12 +120,10 @@ const OrderSummary: FC<OrderSummaryProps> = ({
 
   if (isCartEmpty) {
     return (
-      <div
-        className={`bg-ticketing-surface rounded-lg shadow-sm border border-ticketing-border ${className}`}
-      >
-        <div className="p-6 text-center">
+      <div className={`ticketing-order-summary ${className}`}>
+        <div className="ticketing-order-summary__empty">
           <svg
-            className="w-12 h-12 text-ticketing-text-muted mx-auto mb-4"
+            className="ticketing-order-summary__empty-icon"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -137,40 +135,38 @@ const OrderSummary: FC<OrderSummaryProps> = ({
               d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
             />
           </svg>
-          <p className="text-ticketing-text-muted">Your cart is empty</p>
+          <p className="ticketing-order-summary__empty-message">Your cart is empty</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div
-      className={`bg-ticketing-surface rounded-lg shadow-sm border border-ticketing-border ${className}`}
-    >
-      <div className="p-6 border-b border-ticketing-border">
-        <h3 className="text-lg font-semibold text-ticketing-text">
+    <div className={`ticketing-order-summary ${className}`}>
+      <div className="ticketing-order-summary__header">
+        <h3 className="ticketing-order-summary__title">
           Order Summary
         </h3>
       </div>
 
-      <div className="p-6">
+      <div className="ticketing-order-summary__content">
         {/* Selected Tickets */}
-        <div className="mb-6">
-          <h4 className="text-sm font-medium text-ticketing-text-muted mb-3">
+        <div className="ticketing-order-summary__section">
+          <h4 className="ticketing-order-summary__section-label">
             Selected Tickets
           </h4>
-          <div className="space-y-3">
+          <div className="ticketing-order-summary__items">
             {activeItems.map((item) => (
-              <div key={item.id} className="flex justify-between text-sm">
-                <div>
-                  <span className="text-ticketing-text">{item.name}</span>
-                  <span className="text-ticketing-text-muted ml-2">
+              <div key={item.id} className="ticketing-order-summary__item">
+                <div className="ticketing-order-summary__item-name">
+                  <span className="ticketing-order-summary__item-primary">{item.name}</span>
+                  <span className="ticketing-order-summary__item-quantity">
                     x {item.quantity}
                   </span>
                 </div>
                 <DisplayPrice
                   price={item.totalPrice}
-                  className="text-ticketing-text"
+                  className="ticketing-order-summary__item-price"
                 />
               </div>
             ))}
@@ -179,50 +175,50 @@ const OrderSummary: FC<OrderSummaryProps> = ({
 
         {/* Price Breakdown - Only show if order has costs */}
         {!isOrderFree && (
-          <div className="space-y-3 mb-6">
-            <div className="flex justify-between text-sm">
-              <span className="text-ticketing-text-muted">Subtotal</span>
+          <div className="ticketing-order-summary__breakdown">
+            <div className="ticketing-order-summary__breakdown-row">
+              <span className="ticketing-order-summary__breakdown-label">Subtotal</span>
               <DisplayPrice
                 price={costs.subtotal}
-                className="text-ticketing-text"
+                className="ticketing-order-summary__breakdown-value"
               />
             </div>
             {coupons.length > 0 && costs.discount && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-success">Discount</span>
+              <div className="ticketing-order-summary__breakdown-row">
+                <span className="ticketing-order-summary__breakdown-label ticketing-order-summary__breakdown-label--success">Discount</span>
                 <DisplayPrice
                   price={costs.discount}
-                  className="text-ticketing-success"
+                  className="ticketing-order-summary__breakdown-value ticketing-order-summary__breakdown-value--success"
                   leftDecorator="-"
                 />
               </div>
             )}
             {costs.fee && !isFree(costs.fee) && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-text-muted">Fees</span>
+              <div className="ticketing-order-summary__breakdown-row">
+                <span className="ticketing-order-summary__breakdown-label">Fees</span>
                 <DisplayPrice
                   price={costs.fee}
-                  className="text-ticketing-text"
+                  className="ticketing-order-summary__breakdown-value"
                 />
               </div>
             )}
             {costs.tax && !isFree(costs.tax) && (
-              <div className="flex justify-between text-sm">
-                <span className="text-ticketing-text-muted">Tax</span>
+              <div className="ticketing-order-summary__breakdown-row">
+                <span className="ticketing-order-summary__breakdown-label">Tax</span>
                 <DisplayPrice
                   price={costs.tax}
-                  className="text-ticketing-text"
+                  className="ticketing-order-summary__breakdown-value"
                 />
               </div>
             )}
-            <div className="border-t border-ticketing-border pt-3">
-              <div className="flex justify-between">
-                <span className="text-lg font-semibold text-ticketing-text">
+            <div className="ticketing-order-summary__total-section">
+              <div className="ticketing-order-summary__total-row">
+                <span className="ticketing-order-summary__total-label">
                   Total
                 </span>
                 <DisplayPrice
                   price={costs.total}
-                  className="text-lg font-semibold text-ticketing-text"
+                  className="ticketing-order-summary__total-value"
                 />
               </div>
             </div>
@@ -231,14 +227,16 @@ const OrderSummary: FC<OrderSummaryProps> = ({
 
         {/* Continue Button */}
         {showContinueButton && onContinue && (
-          <Button
-            onClick={onContinue}
-            disabled={continueDisabled}
-            fullWidth
-            size="lg"
-          >
-            {continueLabel}
-          </Button>
+          <div className="ticketing-order-summary__button-area">
+            <Button
+              onClick={onContinue}
+              disabled={continueDisabled}
+              fullWidth
+              size="lg"
+            >
+              {continueLabel}
+            </Button>
+          </div>
         )}
       </div>
     </div>

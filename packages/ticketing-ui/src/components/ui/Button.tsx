@@ -54,46 +54,13 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       className={clsx(
-        // Base styles
-        'inline-flex items-center justify-center font-medium transition-colors',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
-
-        // Variant styles
+        'ticketing-button',
+        `ticketing-button--${variant}`,
+        `ticketing-button--${size}`,
         {
-          // Primary
-          'bg-ticketing-primary text-white hover:bg-ticketing-primary-hover focus:ring-ticketing-primary/50':
-            variant === 'primary',
-
-          // Secondary
-          'bg-ticketing-surface text-ticketing-text hover:bg-ticketing-surface-hover focus:ring-ticketing-primary/50':
-            variant === 'secondary',
-
-          // Outline
-          'border border-ticketing-border bg-transparent text-ticketing-text hover:bg-ticketing-surface focus:ring-ticketing-primary/50':
-            variant === 'outline',
-
-          // Ghost
-          'bg-transparent text-ticketing-text hover:bg-ticketing-surface focus:ring-ticketing-primary/50':
-            variant === 'ghost',
-
-          // Destructive
-          'bg-ticketing-error text-white hover:opacity-90 focus:ring-ticketing-error/50':
-            variant === 'destructive',
+          'ticketing-button--full-width': fullWidth,
+          'ticketing-button--disabled': isDisabled,
         },
-
-        // Size styles
-        {
-          'px-3 py-1.5 text-sm rounded-md gap-1.5': size === 'sm',
-          'px-4 py-2 text-base rounded-lg gap-2': size === 'md',
-          'px-6 py-3 text-lg rounded-lg gap-2.5': size === 'lg',
-        },
-
-        // Full width
-        {
-          'w-full': fullWidth,
-        },
-
         className
       )}
       disabled={isDisabled}
@@ -101,13 +68,13 @@ const Button: FC<ButtonProps> = ({
     >
       {loading && (
         <svg
-          className="animate-spin h-4 w-4"
+          className="ticketing-button__spinner"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
         >
           <circle
-            className="opacity-25"
+            style={{ opacity: 0.25 }}
             cx="12"
             cy="12"
             r="10"
@@ -115,15 +82,15 @@ const Button: FC<ButtonProps> = ({
             strokeWidth="4"
           />
           <path
-            className="opacity-75"
+            style={{ opacity: 0.75 }}
             fill="currentColor"
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
           />
         </svg>
       )}
-      {!loading && iconLeft && <span className="inline-flex">{iconLeft}</span>}
+      {!loading && iconLeft && <span className="ticketing-button__icon">{iconLeft}</span>}
       {children}
-      {!loading && iconRight && <span className="inline-flex">{iconRight}</span>}
+      {!loading && iconRight && <span className="ticketing-button__icon">{iconRight}</span>}
     </button>
   )
 }

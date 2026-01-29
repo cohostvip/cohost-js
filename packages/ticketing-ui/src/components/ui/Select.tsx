@@ -82,40 +82,26 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const hasError = !!error
 
     return (
-      <div className={clsx('flex flex-col', fullWidth && 'w-full')}>
+      <div className={clsx('ticketing-select__wrapper', fullWidth && 'ticketing-select__wrapper--full-width')}>
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-ticketing-text mb-1.5"
+            className="ticketing-select__label"
           >
             {label}
           </label>
         )}
-        <div className="relative">
+        <div className="ticketing-select__field-wrapper">
           <select
             ref={ref}
             id={inputId}
             className={clsx(
-              // Base styles
-              'appearance-none rounded-lg border bg-ticketing-background text-ticketing-text',
-              'focus:outline-none focus:ring-2 focus:ring-offset-0',
-              'transition-colors cursor-pointer',
-              'disabled:opacity-50 disabled:cursor-not-allowed',
-              'pr-10', // Space for chevron
-
-              // Size variants
+              'ticketing-select__field',
+              `ticketing-select__field--${size}`,
               {
-                'px-3 py-1.5 text-sm': size === 'sm',
-                'px-4 py-2 text-base': size === 'md',
-                'px-4 py-3 text-lg': size === 'lg',
+                'ticketing-select__field--error': hasError,
+                'ticketing-select__field--full-width': fullWidth,
               },
-
-              // Error/normal state
-              hasError
-                ? 'border-ticketing-error focus:ring-ticketing-error/50'
-                : 'border-ticketing-border focus:ring-ticketing-primary/50 focus:border-ticketing-primary',
-
-              fullWidth && 'w-full',
               className
             )}
             aria-invalid={hasError}
@@ -140,9 +126,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ))}
           </select>
           {/* Chevron icon */}
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <div className="ticketing-select__chevron">
             <svg
-              className="w-4 h-4 text-ticketing-text-muted"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -159,7 +144,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {hasError && (
           <p
             id={`${inputId}-error`}
-            className="mt-1.5 text-sm text-ticketing-error"
+            className="ticketing-select__error"
           >
             {error}
           </p>
@@ -167,7 +152,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {!hasError && helperText && (
           <p
             id={`${inputId}-helper`}
-            className="mt-1.5 text-sm text-ticketing-text-muted"
+            className="ticketing-select__helper"
           >
             {helperText}
           </p>

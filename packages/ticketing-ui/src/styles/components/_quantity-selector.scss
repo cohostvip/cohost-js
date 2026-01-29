@@ -1,0 +1,34 @@
+// QuantitySelector Component Styles
+// Uses CSS variables for theming - consumers override these
+
+.ticketing-quantity-selector {
+  // Container
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  // Quantity display
+  &__display {
+    text-align: center;
+    font-weight: 500;
+    color: var(--ticketing-text);
+
+    // Size variants
+    &--sm {
+      width: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    &--md {
+      width: 2rem;
+      font-size: 1rem;
+    }
+
+    &--lg {
+      width: 2.5rem;
+      font-size: 1.125rem;
+    }
+  }
+}

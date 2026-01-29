@@ -56,15 +56,15 @@ const ConfirmationLayout: FC<ConfirmationLayoutProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx('max-w-5xl mx-auto', className)}>
-      {header && <div className="mb-8">{header}</div>}
+    <div className={clsx('ticketing-confirmation-layout', className)}>
+      {header && <div className="ticketing-confirmation-layout__header">{header}</div>}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="ticketing-confirmation-layout__grid">
         {/* Right column - Event & Summary (shows first on mobile) */}
-        <div className="lg:order-2 space-y-6">{rightColumn}</div>
+        <div className="ticketing-confirmation-layout__right-column">{rightColumn}</div>
 
         {/* Left column - Tickets, Customer, Payment */}
-        <div className="lg:order-1 space-y-6">{leftColumn}</div>
+        <div className="ticketing-confirmation-layout__left-column">{leftColumn}</div>
       </div>
     </div>
   )

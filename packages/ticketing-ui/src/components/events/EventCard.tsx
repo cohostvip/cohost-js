@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { clsx } from 'clsx'
 
 export interface EventCardProps {
   /**
@@ -103,28 +104,26 @@ const EventCard: FC<EventCardProps> = ({
   LinkComponent,
   className = '',
 }) => {
-  const cardClasses = `
-    group block overflow-hidden rounded-ticketing-lg border border-ticketing-border
-    bg-ticketing-surface transition-all
-    ${onClick || href ? 'cursor-pointer hover:border-ticketing-primary hover:shadow-lg' : ''}
-    ${soldOut ? 'opacity-60' : ''}
-    ${className}
-  `.trim()
+  const cardClasses = clsx(
+    'ticketing-event-card',
+    soldOut && 'ticketing-event-card--sold-out',
+    className
+  )
 
   const content = (
     <>
       {/* Image Section */}
-      <div className="relative aspect-[16/9] overflow-hidden bg-ticketing-surface-hover">
+      <div className="ticketing-event-card__image-container">
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={imageAlt || name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
+            className="ticketing-event-card__image"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="ticketing-event-card__image-placeholder">
             <svg
-              className="h-12 w-12 text-ticketing-text-muted"
+              className="ticketing-event-card__placeholder-icon"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -139,8 +138,8 @@ const EventCard: FC<EventCardProps> = ({
           </div>
         )}
         {soldOut && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <span className="rounded-ticketing-md bg-ticketing-error px-4 py-2 text-sm font-semibold text-white">
+          <div className="ticketing-event-card__sold-out-overlay">
+            <span className="ticketing-event-card__sold-out-badge">
               Sold Out
             </span>
           </div>
@@ -148,22 +147,22 @@ const EventCard: FC<EventCardProps> = ({
       </div>
 
       {/* Content Section */}
-      <div className="p-4">
+      <div className="ticketing-event-card__content">
         {/* Date */}
-        <p className="text-sm font-medium text-ticketing-primary">
+        <p className="ticketing-event-card__date">
           {formatEventDate(startDate, timezone)} at {formatEventTime(startDate, timezone)}
         </p>
 
         {/* Event Name */}
-        <h3 className="mt-1 line-clamp-2 text-lg font-semibold text-ticketing-text group-hover:text-ticketing-primary transition-colors">
+        <h3 className="ticketing-event-card__title">
           {name}
         </h3>
 
         {/* Venue */}
         {venueName && (
-          <p className="mt-1 flex items-center gap-1 text-sm text-ticketing-text-muted">
+          <p className="ticketing-event-card__venue">
             <svg
-              className="h-4 w-4"
+              className="ticketing-event-card__venue-icon"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -181,7 +180,7 @@ const EventCard: FC<EventCardProps> = ({
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <span className="line-clamp-1">
+            <span className="ticketing-event-card__venue-text">
               {venueName}
               {venueAddress && `, ${venueAddress}`}
             </span>
@@ -190,7 +189,7 @@ const EventCard: FC<EventCardProps> = ({
 
         {/* Summary */}
         {summary && (
-          <p className="mt-2 line-clamp-2 text-sm text-ticketing-text-muted">
+          <p className="ticketing-event-card__summary">
             {summary}
           </p>
         )}
@@ -201,7 +200,7 @@ const EventCard: FC<EventCardProps> = ({
   // If href and LinkComponent provided, wrap in custom Link
   if (href && LinkComponent) {
     return (
-      <LinkComponent href={href} className={cardClasses}>
+      <LinkComponent href={href} className={clsx(cardClasses, (onClick || href) && 'group')}>
         {content}
       </LinkComponent>
     )
@@ -210,7 +209,7 @@ const EventCard: FC<EventCardProps> = ({
   // If href but no LinkComponent, use regular anchor
   if (href) {
     return (
-      <a href={href} className={cardClasses}>
+      <a href={href} className={clsx(cardClasses, 'group')}>
         {content}
       </a>
     )
@@ -220,7 +219,7 @@ const EventCard: FC<EventCardProps> = ({
   if (onClick) {
     return (
       <div
-        className={cardClasses}
+        className={clsx(cardClasses, 'group')}
         onClick={onClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {

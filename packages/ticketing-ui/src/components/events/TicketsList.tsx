@@ -1,4 +1,5 @@
 import { FC, useState, useCallback } from 'react'
+import { clsx } from 'clsx'
 import { Button, QuantitySelector, DisplayPrice, Modal } from '../ui'
 
 export interface TicketItem {
@@ -144,36 +145,39 @@ const TicketRow: FC<TicketRowProps> = ({ ticket, quantity, onIncrement, onDecrem
 
   return (
     <>
-      <div className={`py-4 ${isSoldOut ? 'opacity-60' : ''}`}>
+      <div className={clsx('ticketing-ticket-item', isSoldOut && 'ticketing-ticket-item--sold-out')}>
         {/* First row: name+price left, qty right */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="font-medium text-ticketing-text">{ticket.name}</h4>
+        <div className="ticketing-ticket-item__header">
+          <div className="ticketing-ticket-item__info">
+            <div className="ticketing-ticket-item__name-group">
+              <h4 className="ticketing-ticket-item__name">{ticket.name}</h4>
               {isSoldOut && (
-                <span className="rounded-full bg-ticketing-error/20 px-2 py-0.5 text-xs font-medium text-ticketing-error">
+                <span className="ticketing-ticket-item__badge ticketing-ticket-item__badge--sold-out">
                   Sold Out
                 </span>
               )}
               {ticket.status === 'limited' && (
-                <span className="rounded-full bg-ticketing-warning/20 px-2 py-0.5 text-xs font-medium text-ticketing-warning">
+                <span className="ticketing-ticket-item__badge ticketing-ticket-item__badge--limited">
                   Limited
                 </span>
               )}
             </div>
-            <div className="mt-1 flex items-center gap-1">
+            <div className="ticketing-ticket-item__price-row">
               <DisplayPrice
                 price={ticket.price}
-                className={`text-sm ${isSoldOut ? 'text-ticketing-text-muted' : 'text-ticketing-primary'}`}
+                className={clsx(
+                  'ticketing-ticket-item__price',
+                  isSoldOut ? 'ticketing-ticket-item__price--sold-out' : 'ticketing-ticket-item__price--available'
+                )}
               />
               {ticket.includesFees && (
-                <span className="text-xs text-ticketing-text-muted">(incl. fees)</span>
+                <span className="ticketing-ticket-item__price-note">(incl. fees)</span>
               )}
             </div>
           </div>
 
           {/* Quantity selector */}
-          <div className="shrink-0">
+          <div className="ticketing-ticket-item__quantity">
             <QuantitySelector
               value={quantity}
               onIncrement={onIncrement}
@@ -188,14 +192,14 @@ const TicketRow: FC<TicketRowProps> = ({ ticket, quantity, onIncrement, onDecrem
 
         {/* Second row: description snippet */}
         {ticket.description && (
-          <div className="mt-1">
-            <p className="text-xs text-ticketing-text-muted line-clamp-2">
+          <div>
+            <p className="ticketing-ticket-item__description">
               {plainDescription}
             </p>
             {hasLongDescription && (
               <button
                 onClick={() => setShowModal(true)}
-                className="mt-0.5 text-xs text-ticketing-primary hover:underline"
+                className="ticketing-ticket-item__view-more"
               >
                 View more
               </button>
@@ -239,24 +243,25 @@ const TicketGroupSection: FC<TicketGroupSectionProps> = ({
   if (tickets.length === 0) return null
 
   return (
-    <div>
+    <div className="ticketing-ticket-group">
       {group && (
-        <div className="border-b border-ticketing-border pb-2 mb-2">
-          <h3 className="font-semibold text-ticketing-text">{group.name}</h3>
+        <div className="ticketing-ticket-group__header">
+          <h3 className="ticketing-ticket-group__name">{group.name}</h3>
           {group.description && (
-            <p className="text-sm text-ticketing-text-muted">{group.description}</p>
+            <p className="ticketing-ticket-group__description">{group.description}</p>
           )}
         </div>
       )}
-      <div className="divide-y divide-ticketing-border">
+      <div className="ticketing-ticket-group__items">
         {tickets.map((ticket) => (
-          <TicketRow
-            key={ticket.id}
-            ticket={ticket}
-            quantity={quantities[ticket.id] || 0}
-            onIncrement={() => onIncrement(ticket.id)}
-            onDecrement={() => onDecrement(ticket.id)}
-          />
+          <div key={ticket.id} className="ticketing-ticket-group__item">
+            <TicketRow
+              ticket={ticket}
+              quantity={quantities[ticket.id] || 0}
+              onIncrement={() => onIncrement(ticket.id)}
+              onDecrement={() => onDecrement(ticket.id)}
+            />
+          </div>
         ))}
       </div>
     </div>
@@ -313,7 +318,7 @@ const TicketsList: FC<TicketsListProps> = ({
       )
 
       return (
-        <div className="space-y-6">
+        <div className="ticketing-tickets-list__content">
           {groupedTickets.map(({ group, tickets: groupTickets }) => (
             <TicketGroupSection
               key={group.id}
@@ -338,15 +343,16 @@ const TicketsList: FC<TicketsListProps> = ({
 
     // No groups - render flat list
     return (
-      <div className="divide-y divide-ticketing-border">
+      <div className="ticketing-tickets-list__content">
         {tickets.map((ticket) => (
-          <TicketRow
-            key={ticket.id}
-            ticket={ticket}
-            quantity={quantities[ticket.id] || 0}
-            onIncrement={() => handleIncrement(ticket.id)}
-            onDecrement={() => handleDecrement(ticket.id)}
-          />
+          <div key={ticket.id} className="ticketing-ticket-group__item">
+            <TicketRow
+              ticket={ticket}
+              quantity={quantities[ticket.id] || 0}
+              onIncrement={() => handleIncrement(ticket.id)}
+              onDecrement={() => handleDecrement(ticket.id)}
+            />
+          </div>
         ))}
       </div>
     )
@@ -357,9 +363,9 @@ const TicketsList: FC<TicketsListProps> = ({
     if (!showEmptyState) return null
 
     return (
-      <div className={`text-center py-12 ${className}`}>
+      <div className={clsx('ticketing-tickets-list__empty', className)}>
         <svg
-          className="mx-auto h-12 w-12 text-ticketing-text-muted"
+          className="ticketing-tickets-list__empty-icon"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -371,7 +377,7 @@ const TicketsList: FC<TicketsListProps> = ({
             d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
           />
         </svg>
-        <p className="mt-4 text-ticketing-text-muted">{emptyMessage}</p>
+        <p className="ticketing-tickets-list__empty-message">{emptyMessage}</p>
       </div>
     )
   }
@@ -386,10 +392,10 @@ const TicketsList: FC<TicketsListProps> = ({
   }
 
   return (
-    <div className={className}>
+    <div className={clsx('ticketing-tickets-list', className)}>
       {/* Optional header */}
       {title && (
-        <h2 className="text-lg font-bold text-ticketing-text mb-2">{title}</h2>
+        <h2 className="ticketing-tickets-list__title">{title}</h2>
       )}
 
       {/* Tickets list */}
@@ -397,10 +403,10 @@ const TicketsList: FC<TicketsListProps> = ({
 
       {/* Optional Get Tickets button */}
       {onGetTickets && (
-        <div className="pt-4">
+        <div className="ticketing-tickets-list__button-container">
           <Button
             size="lg"
-            className="w-full"
+            className="ticketing-tickets-list__button"
             onClick={handleGetTickets}
             disabled={isLoading || !hasAvailableTickets || totalQuantity === 0}
           >

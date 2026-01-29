@@ -11,18 +11,17 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./preset": {
-      "import": "./dist/tailwind.preset.js",
-      "types": "./dist/tailwind.preset.d.ts"
-    },
-    "./styles": "./dist/styles/variables.css"
+    "./styles": "./dist/styles/index.css",
+    "./styles/variables": "./dist/styles/variables.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && cp src/styles/variables.css dist/styles/variables.css",
+    "build": "tsup && pnpm build:styles",
+    "build:styles": "sass src/styles/index.scss dist/styles/index.css --style=compressed && cp src/styles/variables.css dist/styles/variables.css",
     "dev": "tsup --watch",
+    "dev:styles": "sass src/styles/index.scss dist/styles/index.css --watch",
     "clean": "rm -rf dist",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -31,11 +30,11 @@
     "@cohostvip/cohost-node": "*",
     "@cohostvip/cohost-react": "*",
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0",
-    "tailwindcss": "^3.4.0"
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.2",
+    "sass": "^1.97.0",
     "@cohostvip/cohost-node": "^0.3.7",
     "@storybook/addon-essentials": "^8.5.0",
     "@storybook/addon-interactions": "^8.5.0",
@@ -46,11 +45,8 @@
     "@storybook/test": "^8.5.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "autoprefixer": "^10.4.0",
     "clsx": "^2.1.1",
-    "postcss": "^8.4.0",
     "storybook": "^8.5.0",
-    "tailwindcss": "^3.4.0",
     "tsup": "^8.0.0",
     "typescript": "^5.9.0",
     "vite": "^6.0.0"
@@ -72,7 +68,6 @@
     "ticketing",
     "react",
     "ui",
-    "components",
-    "tailwindcss"
+    "components"
   ]
 }
