@@ -21,6 +21,7 @@ export {
   type TokenRefreshInput,
   type TokenValidateInput,
   type TokenValidateResult,
+  type TokenAuthResult,
   type AuthErrorCode,
   AuthError,
 } from './types';

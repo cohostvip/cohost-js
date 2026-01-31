@@ -8,6 +8,7 @@ import {
   type AuthUser,
   type OTPType,
   type SetAuthenticatedInput,
+  type TokenAuthResult,
 } from '@cohostvip/cohost-auth';
 
 /**
@@ -28,6 +29,8 @@ export interface AuthContextValue {
   getToken: () => Promise<string | null>;
   /** Manually set authenticated state (for custom auth flows like passkey) */
   setAuthenticated: (input: SetAuthenticatedInput) => void;
+  /** Authenticate using a token (validates via API and sets auth state) */
+  authenticateWithToken: (token: string) => Promise<TokenAuthResult>;
 }
 
 /**
@@ -109,6 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       signOut: () => client.signOut(),
       getToken: () => client.getToken(),
       setAuthenticated: (input: SetAuthenticatedInput) => client.setAuthenticated(input),
+      authenticateWithToken: (token: string) => client.authenticateWithToken(token),
     }),
     [state, client]
   );

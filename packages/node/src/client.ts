@@ -25,6 +25,7 @@ export class CohostClient {
   public readonly orders: OrdersAPI;
   public readonly cart: SessionsAPI;
   public readonly coupons: CouponsAPI;
+  public readonly apiUrl: string;
 
   private readonly baseOptions: CohostClientOptions;
 
@@ -33,10 +34,11 @@ export class CohostClient {
     const settings = options.settings || {};
 
     this.baseOptions = { ...options, token: token ?? undefined };
+    this.apiUrl = settings.apiUrl || apiBaseUrl;
 
     const sharedRequest = customRequestFn ?? request({
       token,
-      baseUrl: settings.apiUrl || apiBaseUrl,
+      baseUrl: this.apiUrl,
       debug: settings.debug,
     });
 

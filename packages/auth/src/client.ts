@@ -9,6 +9,7 @@ import {
   OTPVerifyInput,
   OTPType,
   SetAuthenticatedInput,
+  TokenAuthResult,
 } from './types';
 import { authErrors } from './errors';
 import { createStorage, TokenStorage } from './storage';
@@ -20,7 +21,7 @@ const DEFAULT_REFRESH_THRESHOLD = 300; // 5 minutes in seconds
  * Main auth client class for managing authentication state
  */
 export class AuthClient {
-  private config: Required<Omit<AuthConfig, 'channelId'>> & { channelId?: string };
+  private config: Required<Omit<AuthConfig, 'channelId' | 'tokenParam'>> & { channelId?: string; tokenParam?: string };
   private storage: TokenStorage;
   private api: AuthApi;
   private state: AuthState;
@@ -32,6 +33,7 @@ export class AuthClient {
     this.config = {
       apiUrl: config.apiUrl,
       channelId: config.channelId,
+      tokenParam: config.tokenParam,
       storage: config.storage ?? 'localStorage',
       debug: config.debug ?? false,
       autoRefresh: config.autoRefresh ?? true,
@@ -259,6 +261,72 @@ export class AuthClient {
 
     if (this.config.autoRefresh && refreshToken) {
       this.scheduleRefresh(expiresIn);
+    }
+  }
+
+  /**
+   * Get the configured token param name (if any)
+   * Returns undefined if token param detection is disabled
+   */
+  get tokenParamName(): string | undefined {
+    return this.config.tokenParam;
+  }
+
+  /**
+   * Authenticate using a token (e.g., from URL query param).
+   * Validates the token via API and sets auth state if valid.
+   * @param token - The token to authenticate with
+   * @returns Result indicating success/failure
+   */
+  async authenticateWithToken(token: string): Promise<TokenAuthResult> {
+    this.debug('Authenticating with token');
+
+    // Set loading state while authenticating
+    this.updateState({
+      ...this.state,
+      isLoading: true,
+      error: null,
+    });
+
+    try {
+      // Validate the token via API
+      const validateResult = await this.api.validateToken({ accessToken: token });
+
+      if (!validateResult.valid || !validateResult.uid) {
+        this.debug('Token validation failed: invalid token');
+        this.updateState({
+          ...this.state,
+          isLoading: false,
+        });
+        return { success: false, error: 'Invalid token' };
+      }
+
+      // Get user info from the token
+      const userResult = await this.api.getCurrentUser(token);
+
+      // Calculate expiry from token
+      const now = Math.floor(Date.now() / 1000);
+      const expiresIn = validateResult.exp ? validateResult.exp - now : 7 * 24 * 60 * 60;
+
+      // Set authenticated state (this also sets isLoading: false)
+      this.setAuthenticated({
+        accessToken: token,
+        user: userResult.user,
+        expiresIn,
+      });
+
+      this.debug('Token authentication successful for:', userResult.user.uid);
+
+      return { success: true, user: userResult.user };
+    } catch (error) {
+      this.debug('Token authentication failed:', error);
+      this.updateState({
+        ...this.state,
+        isLoading: false,
+        error: AuthError.fromError(error as Error, 'INVALID_TOKEN'),
+      });
+      const message = error instanceof Error ? error.message : 'Token authentication failed';
+      return { success: false, error: message };
     }
   }
 

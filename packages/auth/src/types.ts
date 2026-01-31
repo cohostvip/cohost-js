@@ -14,6 +14,12 @@ export interface AuthConfig {
   autoRefresh?: boolean;
   /** Refresh tokens this many seconds before expiry (default: 300 = 5 minutes) */
   refreshThreshold?: number;
+  /**
+   * Query string parameter name for token-based authentication (e.g., 'token' or 't').
+   * If set, the client will check for this param and attempt to authenticate with it.
+   * If not set, token param detection is disabled.
+   */
+  tokenParam?: string;
 }
 
 /**
@@ -144,6 +150,18 @@ export interface TokenValidateResult {
   channelId?: string;
   exp?: number;
   iat?: number;
+}
+
+/**
+ * Result from authenticating with a token
+ */
+export interface TokenAuthResult {
+  /** Whether authentication succeeded */
+  success: boolean;
+  /** User if authentication succeeded */
+  user?: AuthUser;
+  /** Error message if authentication failed */
+  error?: string;
 }
 
 /**

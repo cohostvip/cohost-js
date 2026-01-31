@@ -15,6 +15,8 @@ export {
   useAuth,
   useUser,
   useAuthClient,
+  useTokenAuth,
+  type UseTokenAuthOptions,
   AuthGuard,
   type AuthGuardProps,
 } from './auth';
