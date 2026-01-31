@@ -1,5 +1,5 @@
 import { CohostEndpoint } from '../endpoint';
-import { Attendee, Order, PaginatedRequest, PaginatedResponse } from '../../types/index';
+import { Attendee, Order, PaginatedRequest, PaginatedResponse } from '@cohostvip/cohost-types';
 import { paginatedOptions } from '../http/request';
 
 /**

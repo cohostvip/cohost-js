@@ -1,4 +1,4 @@
-import { CartSession, StartCartSessionInput, UpdatableCartSession } from '../../types';
+import { CartSession, StartCartSessionInput, UpdatableCartSession } from '@cohostvip/cohost-types';
 import { CohostEndpoint } from '../endpoint';
 
 /**

@@ -1,7 +1,7 @@
 // src/api/EventsAPI.ts
 
 import { CohostEndpoint } from '../endpoint';
-import { Attendee, EventProfile, PaginatedRequest, PaginatedResponse, Ticket } from '../../types/index';
+import { Attendee, EventProfile, PaginatedRequest, PaginatedResponse, Ticket } from '@cohostvip/cohost-types';
 import { paginatedOptions } from '../http/request';
 
 /**

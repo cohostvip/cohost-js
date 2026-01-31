@@ -1,4 +1,4 @@
-import { Customer } from "../../types";
+import { Customer } from "@cohostvip/cohost-types";
 
 
 export interface UpdatableCartSession {

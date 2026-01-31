@@ -1,4 +1,4 @@
-import { PaginatedRequest } from "../../types";
+import { PaginatedRequest } from "@cohostvip/cohost-types";
 import { apiBaseUrl } from "../apiVersion";
 import { CohostError } from "../error/CohostError";
 import { defaultSettings, runtimeOverrides } from "../settings";
