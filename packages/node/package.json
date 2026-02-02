@@ -46,7 +46,7 @@
   },
   "packageManager": "pnpm@10.8.1",
   "dependencies": {
-    "@cohostvip/cohost-types": "^0.3.13"
+    "@cohostvip/cohost-types": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "24.6.2",

@@ -36,8 +36,8 @@ importers:
   packages/node:
     dependencies:
       '@cohostvip/cohost-types':
-        specifier: ^0.3.12
-        version: 0.3.12
+        specifier: workspace:^
+        version: link:../types
     devDependencies:
       '@types/node':
         specifier: 24.6.2
@@ -271,10 +271,6 @@ packages:
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
-
-  '@cohostvip/cohost-types@0.3.12':
-    resolution: {integrity: sha512-4/AnD/T9Huu5F+YWOQ7icZQEzp0fK2IDHihdK7HK7xMyBSBhIXHSbeY/z6EkKXF2Rq3qGzM36VlUDlAcbuA/Jw==}
-    engines: {node: '>=18.0.0'}
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -2355,8 +2351,6 @@ snapshots:
       '@cohostvip/cohost-node': 0.3.7
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
-
-  '@cohostvip/cohost-types@0.3.12': {}
 
   '@csstools/color-helpers@5.1.0': {}
 
