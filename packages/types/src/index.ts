@@ -672,5 +672,23 @@ type UpdatableCartSession = {
     forwarded?: any | undefined;
 };
 
+// Content Block types
+type ContentBlock = {
+    /** Unique identifier for this block instance */
+    id: string;
+    /** Block type identifier (e.g., "richtext", "gallery", "locations", "faq") */
+    type: string;
+    /** Display order for this block (lower numbers appear first) */
+    order: number;
+    /** Block title displayed as the header */
+    title?: string;
+    /** Block visibility status: 'live' (visible to guests) or 'hidden' (editor only) */
+    status?: 'live' | 'hidden';
+    /** Special designation for system blocks (e.g., "description") */
+    designation?: string;
+    /** Block-specific data structure (varies by block type) */
+    data: any;
+};
+
 // Exports
-export type { Order, PersonAddress, OrderItemCosts, AttendeeCosts, Barcode, Photo, Location, MultipartText, Customer, CouponSummary, OrderCosts, Offering, Ticket, Event, EventProfile, OfferingSnapshot, ResolvedCartContext, OrderItem, Attendee, Pagination, PaginationResponse, PaginatedResponse, PaginatedRequest, CartSession, CartSessionItem, CartSessionItemOffering, StartCartSessionInput, UpdatableCartSession };
+export type { Order, PersonAddress, OrderItemCosts, AttendeeCosts, Barcode, Photo, Location, MultipartText, Customer, CouponSummary, OrderCosts, Offering, Ticket, Event, EventProfile, OfferingSnapshot, ResolvedCartContext, OrderItem, Attendee, Pagination, PaginationResponse, PaginatedResponse, PaginatedRequest, CartSession, CartSessionItem, CartSessionItemOffering, StartCartSessionInput, UpdatableCartSession, ContentBlock };

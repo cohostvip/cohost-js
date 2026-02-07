@@ -1,7 +1,7 @@
 // src/api/EventsAPI.ts
 
 import { CohostEndpoint } from '../endpoint';
-import { Attendee, EventProfile, PaginatedRequest, PaginatedResponse, Ticket } from '@cohostvip/cohost-types';
+import { Attendee, ContentBlock, EventProfile, PaginatedRequest, PaginatedResponse, Ticket } from '@cohostvip/cohost-types';
 import { paginatedOptions } from '../http/request';
 
 /**
@@ -63,6 +63,26 @@ export class EventsAPI extends CohostEndpoint {
    */
   async attendees(id: string, filters?: PaginatedRequest<any>) {
     return this.request<PaginatedResponse<Attendee>>(`/events/${id}/attendees`, paginatedOptions(filters));
+  }
+
+  /**
+   * Fetch content blocks for a specific event.
+   *
+   * Content blocks are reusable, composable units of content such as rich text,
+   * galleries, location lists, FAQs, etc. Blocks are returned in display order.
+   *
+   * @param id - The unique identifier of the event
+   * @returns A Promise resolving to an array of content blocks
+   * @throws Will throw an error if the request fails or the event does not exist
+   *
+   * @example
+   * ```ts
+   * const blocks = await client.events.blocks('event-id');
+   * console.log(blocks); // [{ id: 'block-1', type: 'richtext', ... }]
+   * ```
+   */
+  async blocks(id: string) {
+    return this.request<ContentBlock[]>(`/events/${id}/blocks`);
   }
 
 
