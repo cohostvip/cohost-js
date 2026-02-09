@@ -690,5 +690,44 @@ type ContentBlock = {
     data: any;
 };
 
+/**
+ * User profile information
+ */
+type Profile = {
+    uid: string;
+    email?: string | undefined;
+    phone?: string | undefined;
+    first?: string | undefined;
+    last?: string | undefined;
+    name?: string | undefined;
+    displayName?: string | undefined;
+    photoURL?: string | undefined;
+    gender?: string | undefined;
+    birthdate?: string | undefined;
+};
+
+/**
+ * Channel-specific user profile
+ * Users can have different profiles for different channels (groov, cohost, etc.)
+ */
+type ChannelProfile = {
+    uid: string;
+    channelId: string;
+    id: string;
+    username?: string | undefined;
+    displayName?: string | undefined;
+    bio?: string | undefined;
+    photoURL?: string | undefined;
+    website?: string | undefined;
+    location?: string | undefined;
+    visibility: 'public' | 'private' | 'unlisted';
+    verified?: boolean | undefined;
+    socialLinks?: {
+        [key: string]: string;
+    } | undefined;
+    created: string;
+    changed: string;
+};
+
 // Exports
-export type { Order, PersonAddress, OrderItemCosts, AttendeeCosts, Barcode, Photo, Location, MultipartText, Customer, CouponSummary, OrderCosts, Offering, Ticket, Event, EventProfile, OfferingSnapshot, ResolvedCartContext, OrderItem, Attendee, Pagination, PaginationResponse, PaginatedResponse, PaginatedRequest, CartSession, CartSessionItem, CartSessionItemOffering, StartCartSessionInput, UpdatableCartSession, ContentBlock };
+export type { Order, PersonAddress, OrderItemCosts, AttendeeCosts, Barcode, Photo, Location, MultipartText, Customer, CouponSummary, OrderCosts, Offering, Ticket, Event, EventProfile, OfferingSnapshot, ResolvedCartContext, OrderItem, Attendee, Pagination, PaginationResponse, PaginatedResponse, PaginatedRequest, CartSession, CartSessionItem, CartSessionItemOffering, StartCartSessionInput, UpdatableCartSession, ContentBlock, Profile, ChannelProfile };

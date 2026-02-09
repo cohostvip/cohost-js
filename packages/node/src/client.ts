@@ -2,6 +2,7 @@ import { EventsAPI } from './api/events';
 import { OrdersAPI } from './api/orders';
 import { SessionsAPI } from './api/sessions';
 import { CouponsAPI } from './api/coupons';
+import { UsersAPI } from './api/users';
 import { apiBaseUrl } from './apiVersion';
 import { request, RequestFn } from './http/request';
 import { CohostClientSettings } from './settings';
@@ -25,6 +26,7 @@ export class CohostClient {
   public readonly orders: OrdersAPI;
   public readonly cart: SessionsAPI;
   public readonly coupons: CouponsAPI;
+  public readonly users: UsersAPI;
   public readonly apiUrl: string;
 
   private readonly baseOptions: CohostClientOptions;
@@ -46,6 +48,7 @@ export class CohostClient {
     this.orders = new OrdersAPI(sharedRequest, settings);
     this.cart = new SessionsAPI(sharedRequest, settings);
     this.coupons = new CouponsAPI(sharedRequest, settings);
+    this.users = new UsersAPI(sharedRequest, settings);
   }
 
   /**

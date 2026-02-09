@@ -1,6 +1,6 @@
 {
   "name": "cohost-js",
-  "version": "0.3.14",
+  "version": "0.3.16",
   "private": true,
   "description": "Cohost JavaScript/TypeScript SDK monorepo",
   "repository": {

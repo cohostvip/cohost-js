@@ -82,7 +82,8 @@ export class EventsAPI extends CohostEndpoint {
    * ```
    */
   async blocks(id: string) {
-    return this.request<ContentBlock[]>(`/events/${id}/blocks`);
+    const response = await this.request<{ blocks: ContentBlock[] }>(`/events/${id}/blocks`);
+    return response.blocks;
   }
 
 
