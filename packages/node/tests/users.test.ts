@@ -15,7 +15,7 @@ describe('UsersAPI', () => {
   });
 
   describe('me()', () => {
-    it('should fetch the current user profile', async () => {
+    it('should fetch the current user profile and unwrap the response', async () => {
       const mockProfile = {
         uid: 'user123',
         email: 'user@example.com',
@@ -24,17 +24,20 @@ describe('UsersAPI', () => {
         displayName: 'John Doe',
       };
 
+      // Mock returns unwrapped data (request function handles unwrapping in real scenario)
       (mockRequest as any).mockResolvedValue(mockProfile);
 
       const result = await usersAPI.me();
 
       expect(mockRequest).toHaveBeenCalledWith('/me');
+      // Result should be unwrapped Profile, not { data: Profile }
       expect(result).toEqual(mockProfile);
+      expect(result.email).toBe('user@example.com');
     });
   });
 
   describe('fetch()', () => {
-    it('should fetch a user channel profile by ID', async () => {
+    it('should fetch a user channel profile by ID and unwrap the response', async () => {
       const mockChannelProfile = {
         uid: 'user123',
         channelId: 'groov',
@@ -47,6 +50,7 @@ describe('UsersAPI', () => {
         changed: '2024-01-01T00:00:00Z',
       };
 
+      // Mock returns unwrapped data (request function handles unwrapping in real scenario)
       (mockRequest as any).mockResolvedValue(mockChannelProfile);
 
       const result = await usersAPI.fetch('user123', { channelId: 'groov' });
@@ -56,7 +60,10 @@ describe('UsersAPI', () => {
           'x-cohost-channel-id': 'groov',
         },
       });
+      // Result should be unwrapped ChannelProfile, not { data: ChannelProfile }
       expect(result).toEqual(mockChannelProfile);
+      expect(result.uid).toBe('user123');
+      expect(result.username).toBe('johndoe');
     });
 
     it('should throw error if channelId is not provided', async () => {
@@ -94,7 +101,7 @@ describe('UsersAPI', () => {
   describe('list()', () => {
     it('should list public channel profiles', async () => {
       const mockResponse = {
-        profiles: [
+        results: [
           {
             uid: 'user123',
             channelId: 'groov',
@@ -129,7 +136,7 @@ describe('UsersAPI', () => {
 
     it('should support pagination parameters', async () => {
       const mockResponse = {
-        profiles: [],
+        results: [],
         pagination: {
           total: 100,
           limit: 10,
@@ -151,7 +158,7 @@ describe('UsersAPI', () => {
 
     it('should support verified filter', async () => {
       const mockResponse = {
-        profiles: [],
+        results: [],
         pagination: {
           total: 5,
           limit: 20,

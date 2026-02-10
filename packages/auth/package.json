@@ -1,6 +1,6 @@
 {
   "name": "@cohostvip/cohost-auth",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "Cohost Auth Client - Authentication state management and API client",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

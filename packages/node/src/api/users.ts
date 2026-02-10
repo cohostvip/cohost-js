@@ -101,7 +101,7 @@ export class UsersAPI extends CohostEndpoint {
    *
    * // List all public Groov profiles
    * const result = await client.users.list({ channelId: 'groov', limit: 10 });
-   * console.log(result.profiles); // Array of profiles
+   * console.log(result.results); // Array of profiles
    * console.log(result.pagination); // { total, limit, offset, hasMore }
    *
    * // List only verified profiles
@@ -117,7 +117,7 @@ export class UsersAPI extends CohostEndpoint {
     offset?: number;
     verified?: boolean;
   }): Promise<{
-    profiles: ChannelProfile[];
+    results: ChannelProfile[];
     pagination: {
       total: number;
       limit: number;
@@ -138,7 +138,7 @@ export class UsersAPI extends CohostEndpoint {
     const path = `/users${queryString ? `?${queryString}` : ''}`;
 
     return this.request<{
-      profiles: ChannelProfile[];
+      results: ChannelProfile[];
       pagination: {
         total: number;
         limit: number;
