@@ -6,6 +6,7 @@ import { UsersAPI } from './api/users';
 import { apiBaseUrl } from './apiVersion';
 import { request, RequestFn } from './http/request';
 import { CohostClientSettings } from './settings';
+import { PaginatedResults } from './types/pagination';
 
 /**
  * Configuration options for instantiating a CohostClient.
@@ -30,6 +31,7 @@ export class CohostClient {
   public readonly apiUrl: string;
 
   private readonly baseOptions: CohostClientOptions;
+  private readonly requestFn: RequestFn;
 
   constructor(options: CohostClientOptions = {}, customRequestFn?: RequestFn) {
     const token = options.token || process.env.COHOST_API_TOKEN || process.env.NEXT_PUBLIC_COHOST_API_TOKEN || null;
@@ -44,11 +46,64 @@ export class CohostClient {
       debug: settings.debug,
     });
 
+    this.requestFn = sharedRequest;
+
     this.events = new EventsAPI(sharedRequest, settings);
     this.orders = new OrdersAPI(sharedRequest, settings);
     this.cart = new SessionsAPI(sharedRequest, settings);
     this.coupons = new CouponsAPI(sharedRequest, settings);
     this.users = new UsersAPI(sharedRequest, settings);
+  }
+
+  /**
+   * Make a generic request to any endpoint.
+   * Use this for custom endpoints not covered by the resource-specific APIs.
+   *
+   * @example
+   * ```typescript
+   * const profile = await client.request<OrganizerProfile>('/groov/profile/o-org_party');
+   * ```
+   */
+  public request<T = any>(
+    path: string,
+    options?: {
+      method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+      data?: any;
+      query?: Record<string, string | number | boolean | string[] | undefined>;
+      headers?: Record<string, string>;
+    }
+  ): Promise<T> {
+    return this.requestFn<T>(path, options);
+  }
+
+  /**
+   * Make a paginated request to any list endpoint.
+   * Automatically handles pagination parameters and returns typed results.
+   *
+   * @example
+   * ```typescript
+   * const result = await client.paginatedRequest<Event>('/groov/events', {
+   *   pagination: { page: 1, size: 20 }
+   * });
+   * console.log(result.results); // Event[]
+   * console.log(result.pagination.total); // total count
+   * ```
+   */
+  public paginatedRequest<T = any>(
+    path: string,
+    options?: {
+      method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+      data?: any;
+      query?: Record<string, string | number | boolean | string[] | undefined>;
+      headers?: Record<string, string>;
+      pagination?: {
+        size: number;
+        page: number;
+        continuation?: string;
+      };
+    }
+  ): Promise<PaginatedResults<T>> {
+    return this.requestFn<PaginatedResults<T>>(path, options);
   }
 
   /**
