@@ -2,6 +2,58 @@ import { CartSession, StartCartSessionInput, UpdatableCartSession } from '@cohos
 import { CohostEndpoint } from '../endpoint';
 
 /**
+ * The Authorize.Net Accept Hosted iframe success-callback payload.
+ *
+ * Stored verbatim on `cart.meta.transaction.raw.iframeResponse` for forensics
+ * by the server. The server only **uses** `transactionData.transId` to fetch
+ * the canonical transaction directly from Authorize.Net; everything else here
+ * is treated as a hint and never trusted as the source of truth.
+ */
+export type AuthNetIframeResponse = {
+    resultCode: string;
+    messageCode: string;
+    transactionData: {
+        accountType?: string;
+        accountNumber?: string;
+        transId: string;
+        responseCode: string;
+        authorization?: string;
+        totalAmount?: string;
+        orderInvoiceNumber?: string;
+        dateTime?: string;
+    };
+};
+
+/**
+ * Inline transaction details submitted alongside `place-order`.
+ *
+ * The server fetches the transaction independently from the gateway and
+ * verifies status, amount, and currency before persisting it.
+ */
+export type InlineTransactionInput = {
+    provider: 'authnet';
+    /** The provider transaction id (e.g. from the iframe response). */
+    transId: string;
+    /** Optional verbatim iframe payload for forensics. */
+    iframeResponse?: AuthNetIframeResponse;
+};
+
+/** Body accepted by `POST /cart/sessions/:id/place-order`. */
+export type PlaceOrderInput = {
+    skipPaymentValidationToken?: string;
+    transaction?: InlineTransactionInput;
+};
+
+/** Response from `POST /cart/sessions/:id/place-order`. */
+export type PlaceOrderResult = {
+    result: 'ok' | string;
+    redirUri: string;
+    id: string;
+    uid: string;
+    accessToken?: string;
+};
+
+/**
  * Provides methods to interact with cart sessions in the Cohost API.
  *
  * Usage:
@@ -148,18 +200,23 @@ export class SessionsAPI extends CohostEndpoint {
     }
 
     /**
-     * Close the cart session, and place the order.
-     * 
+     * Close the cart session and place the order.
+     *
+     * For paid carts using the Auth.Net Accept Hosted iframe, pass
+     * `{ transaction: { provider: 'authnet', transId, iframeResponse } }`
+     * — the server will fetch the transaction directly from Authorize.Net
+     * to verify it before creating the order.
+     *
      * @param sessionId - The ID of the session
-     * @param data - Data to place the order
-     * @returns {CartSession} The latest cart session
-     * 
+     * @param input - Optional place-order input (skip-token, inline transaction)
+     * @returns {PlaceOrderResult} Order placement result with redirect uri
+     *
      * @throws Will throw an error if the order placement fails
      */
-    async placeOrder(sessionId: string, data: any) {
-        return this.request<CartSession>(`/cart/sessions/${sessionId}/place-order`, {
+    async placeOrder(sessionId: string, input: PlaceOrderInput = {}) {
+        return this.request<PlaceOrderResult>(`/cart/sessions/${sessionId}/place-order`, {
             method: 'POST',
-            data: data,
+            data: input,
         });
     }
 

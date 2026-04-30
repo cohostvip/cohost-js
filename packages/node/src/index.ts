@@ -17,5 +17,11 @@ export function createCohostClient(options: CohostClientOptions): CohostClient {
 export { CohostClient }
 export { type Coupon } from './api/coupons';
 export { UsersAPI } from './api/users';
+export {
+    type AuthNetIframeResponse,
+    type InlineTransactionInput,
+    type PlaceOrderInput,
+    type PlaceOrderResult,
+} from './api/sessions';
 
 export * from '@cohostvip/cohost-types';

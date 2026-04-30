@@ -182,6 +182,41 @@ const result = await client.cart.placeOrder(session.id);
 await client.cart.cancel(session.id);
 ```
 
+#### Place order with an Auth.Net iframe transaction
+
+If your storefront uses the **Authorize.Net Accept Hosted iframe**, the
+transaction is created by Authorize.Net out-of-band — you don't call
+`processPayment`. Instead, pass the iframe success callback's `transId`
+directly to `placeOrder`:
+
+```typescript
+import type { AuthNetIframeResponse, PlaceOrderResult } from '@cohostvip/cohost-node';
+
+// `iframeResponse` is the verbatim payload from the Accept Hosted iframe
+// success callback (window.AuthorizeNetIFrame.onReceiveCommunication).
+const result: PlaceOrderResult = await client.cart.placeOrder(session.id, {
+  transaction: {
+    provider: 'authnet',
+    transId: iframeResponse.transactionData.transId,
+    iframeResponse, // optional — stored on cart.meta.transaction.raw for forensics
+  },
+});
+
+// result.redirUri = '/oc/<uid>/<orderId>'
+// result.id, result.uid, result.accessToken
+```
+
+**What happens server-side:**
+1. The server receives the body and reads `transaction.transId`.
+2. It calls Authorize.Net directly using your merchant credentials to fetch
+   the canonical transaction record. The iframe payload is **not trusted**
+   as the source of truth.
+3. It verifies status is `approved`, the amount and currency match the cart
+   total, and the transaction isn't voided / refunded / under FDS review.
+4. On success it persists `cart.meta.transaction` and creates the order.
+   On verification failure it returns 422 with details and the cart stays
+   open for retry.
+
 ### Coupons API
 
 ```typescript

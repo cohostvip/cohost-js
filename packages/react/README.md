@@ -77,6 +77,94 @@ See its documentation for available methods like:
 
 ---
 
+## 🛒 Checkout — `CohostCheckoutProvider`
+
+Wrap a checkout page in `CohostCheckoutProvider` and use `useCohostCheckout()`
+to drive cart updates, payment, and order placement.
+
+```tsx
+import { CohostCheckoutProvider, useCohostCheckout } from '@cohostvip/cohost-react';
+
+export function CheckoutPage({ cartSessionId }: { cartSessionId: string }) {
+  return (
+    <CohostCheckoutProvider cartSessionId={cartSessionId}>
+      <CheckoutForm />
+    </CohostCheckoutProvider>
+  );
+}
+```
+
+### Auth.Net Accept Hosted iframe
+
+For the iframe payment flow, hand the iframe's success callback **directly**
+to the provider — no need to call `processPayment` separately. The provider
+extracts the `transId`, builds the place-order body, and submits. The server
+then independently validates the transaction with Authorize.Net before
+creating the order.
+
+```tsx
+import { useCohostCheckout, type AuthNetIframeResponse } from '@cohostvip/cohost-react';
+
+function PayWithIframe() {
+  const { submitAuthnetIframeTransaction } = useCohostCheckout();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    // Authorize.Net Accept Hosted iframe communicates back via this global.
+    (window as any).AuthorizeNetIFrame = {
+      onReceiveCommunication: async (queryStr: string) => {
+        const params = Object.fromEntries(new URLSearchParams(queryStr));
+
+        if (params.action === 'transactResponse' && params.response) {
+          const iframeResponse: AuthNetIframeResponse = JSON.parse(params.response);
+
+          try {
+            const result = await submitAuthnetIframeTransaction(iframeResponse);
+            if (result?.redirUri) router.push(result.redirUri);
+          } catch (err) {
+            // Verification failed (transaction not found, amount mismatch,
+            // FDS pending, etc.). Cart stays open — show an error and retry.
+            console.error('Order placement failed:', err);
+          }
+        }
+      },
+    };
+  }, [submitAuthnetIframeTransaction, router]);
+
+  return <iframe src={hostedPaymentPageUrl} />;
+}
+```
+
+**What the provider does for you:**
+- Reads `iframeResponse.transactionData.transId`.
+- POSTs to `/cart/sessions/:id/place-order` with
+  `{ transaction: { provider: 'authnet', transId, iframeResponse } }`.
+- The full iframe payload is forwarded to the server and stored on
+  `cart.meta.transaction.raw.iframeResponse` for forensics — but **never**
+  trusted as the source of truth. The server fetches the transaction from
+  Authorize.Net to verify status, amount, and currency.
+
+### Lower-level: `placeOrder(input?)`
+
+You can also call `placeOrder` directly if you need to pass the body
+yourself (e.g. you already have a `transId` from another flow):
+
+```tsx
+const { placeOrder } = useCohostCheckout();
+
+const result = await placeOrder({
+  transaction: {
+    provider: 'authnet',
+    transId: '121598068514',
+  },
+});
+```
+
+For free or fully-prepaid carts, `placeOrder()` with no arguments still
+works as before.
+
+---
+
 ## ✅ Requirements
 
 - React 18 or 19

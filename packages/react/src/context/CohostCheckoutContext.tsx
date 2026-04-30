@@ -1,7 +1,18 @@
 import * as React from 'react';
 import { createContext, useContext, useEffect } from 'react';
 import { useCohostClient } from './CohostContext';
-import type { CartSession, Customer, PersonAddress, UpdatableCartSession } from '@cohostvip/cohost-node';
+import type {
+    AuthNetIframeResponse,
+    CartSession,
+    Customer,
+    InlineTransactionInput,
+    PersonAddress,
+    PlaceOrderInput,
+    PlaceOrderResult,
+    UpdatableCartSession,
+} from '@cohostvip/cohost-node';
+
+export type { AuthNetIframeResponse, InlineTransactionInput, PlaceOrderInput, PlaceOrderResult };
 
 export type CohostCheckoutProviderProps = {
     cartSessionId: string;
@@ -18,7 +29,18 @@ export type CohostCheckoutContextType = {
     decrementItem: (offeringId: string) => Promise<void>;
 
     updateCartSession: (data: Partial<UpdatableCartSession>) => Promise<void>;
-    placeOrder: () => Promise<CartSession | undefined>;
+    placeOrder: (input?: PlaceOrderInput) => Promise<PlaceOrderResult | undefined>;
+    /**
+     * Submit the success callback from the Auth.Net Accept Hosted iframe.
+     *
+     * Pass the verbatim payload received from the iframe — the SDK extracts
+     * the `transId`, builds the `place-order` body, and submits it. The
+     * server then independently validates the transaction against
+     * Authorize.Net before creating the order.
+     */
+    submitAuthnetIframeTransaction: (
+        iframeResponse: AuthNetIframeResponse
+    ) => Promise<PlaceOrderResult | undefined>;
     processPayment: (data: unknown) => Promise<unknown>;
     applyCoupon: (code: string) => Promise<void>;
     removeCoupon: (id: string) => Promise<void>;
@@ -202,15 +224,34 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
     }
 
 
-    const placeOrder = async () => {
+    const placeOrder = async (input: PlaceOrderInput = {}) => {
         assertCartSession();
 
         try {
-            const res = await client.cart.placeOrder(cartSessionId, {});
+            const res = await client.cart.placeOrder(cartSessionId, input);
             return res;
         } catch (error) {
             logError("Error placing order:", error);
         }
+    }
+
+    const submitAuthnetIframeTransaction = async (iframeResponse: AuthNetIframeResponse) => {
+        assertCartSession();
+
+        const transId = iframeResponse?.transactionData?.transId;
+        if (!transId) {
+            const err = new Error('Auth.Net iframe response is missing transactionData.transId');
+            logError("Invalid iframe response:", err);
+            throw err;
+        }
+
+        return placeOrder({
+            transaction: {
+                provider: 'authnet',
+                transId,
+                iframeResponse,
+            },
+        });
     }
 
 
@@ -260,6 +301,7 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
 
             updateCartSession,
             placeOrder,
+            submitAuthnetIframeTransaction,
             joinGroup,
             processPayment,
             applyCoupon,
