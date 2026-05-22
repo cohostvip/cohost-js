@@ -54,6 +54,61 @@ export type PlaceOrderResult = {
 };
 
 /**
+ * A ready-to-use Authorize.Net `transactionRequest` payload, returned on the
+ * payment intent for Auth.Net carts.
+ *
+ * Merge `transactionRequest` into your `getHostedPaymentPageRequest` (Accept
+ * Hosted iframe) or `createTransactionRequest` (direct API) so the resulting
+ * transaction lands fully populated (billing, line items, tax/shipping, order
+ * invoice). Built fresh per request and not persisted on the cart — fetch it via
+ * `getPaymentIntent` (or force a refetch in the React `PaymentElementProvider`).
+ */
+export type AuthNetPaymentRequest = {
+    transactionRequest: {
+        transactionType: 'authCaptureTransaction';
+        amount: string;
+        currencyCode: string;
+        customer?: { email?: string; id?: string };
+        billTo?: {
+            firstName?: string;
+            lastName?: string;
+            address?: string;
+            city?: string;
+            state?: string;
+            zip?: string;
+            country?: string;
+            phoneNumber?: string;
+        };
+        lineItems?: {
+            lineItem: Array<{
+                itemId: string;
+                name: string;
+                description?: string;
+                quantity: number;
+                unitPrice: string;
+                taxable: boolean;
+            }>;
+        };
+        tax?: { amount: string; name: string };
+        shipping?: { amount: string; name: string };
+        order?: { invoiceNumber: string; description?: string };
+    };
+};
+
+/** Response from `POST /cart/sessions/:id/payment/payment-intent`. */
+export type PaymentIntentResponse = {
+    paymentIntentId: string;
+    client_secret?: string;
+    provider?: string;
+    publicClientKey?: string;
+    apiLoginId?: string;
+    amount?: number;
+    currency?: string;
+    /** (Authorize.Net) Ready-to-use request payload for the Accept Hosted iframe. */
+    paymentRequest?: AuthNetPaymentRequest;
+};
+
+/**
  * Provides methods to interact with cart sessions in the Cohost API.
  *
  * Usage:
@@ -168,15 +223,7 @@ export class SessionsAPI extends CohostEndpoint {
      * @throws Will throw an error if the request fails
      */
     async getPaymentIntent(sessionId: string) {
-        return this.request<{
-            paymentIntentId: string;
-            client_secret?: string;
-            provider?: string;
-            publicClientKey?: string;
-            apiLoginId?: string;
-            amount?: number;
-            currency?: string;
-        }>(`/cart/sessions/${sessionId}/payment/payment-intent`, {
+        return this.request<PaymentIntentResponse>(`/cart/sessions/${sessionId}/payment/payment-intent`, {
             method: 'POST',
         });
     }

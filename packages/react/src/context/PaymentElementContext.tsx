@@ -6,6 +6,16 @@ import { authnetTokenizer } from '../lib/tokenizers/authnet';
 
 export type PaymentElementProviderProps = {
     children: React.ReactNode;
+    /**
+     * Always fetch the payment intent from the `/payment/payment-intent` endpoint
+     * instead of reusing `cartSession.meta.paymentIntent`.
+     *
+     * Enable this when you need the endpoint-only fields that are built fresh per
+     * request and not persisted on the cart — e.g. the Authorize.Net `paymentRequest`
+     * payload for the Accept Hosted iframe. Defaults to `false` (use the cached
+     * `meta.paymentIntent` when present).
+     */
+    forceFetchPaymentIntent?: boolean;
 };
 
 export type PaymentElementContextType = {
@@ -22,7 +32,7 @@ const tokenizers: Record<string, Tokenizer> = {
 
 
 
-export const PaymentElementProvider: React.FC<PaymentElementProviderProps> = ({ children }) => {
+export const PaymentElementProvider: React.FC<PaymentElementProviderProps> = ({ children, forceFetchPaymentIntent = false }) => {
     const { cartSession, cartSessionId } = useCohostCheckout();
     const { client, debug } = useCohostClient();
 
@@ -62,8 +72,9 @@ export const PaymentElementProvider: React.FC<PaymentElementProviderProps> = ({ 
             return;
         }
 
-        // If cart session has payment intent, use it
-        if (cartSession.meta?.paymentIntent) {
+        // Reuse the cached intent on the cart unless the caller wants the fresh,
+        // endpoint-only payload (e.g. Auth.Net `paymentRequest`).
+        if (!forceFetchPaymentIntent && cartSession.meta?.paymentIntent) {
             setPaymentIntent(cartSession.meta.paymentIntent);
             return;
         }
@@ -88,7 +99,7 @@ export const PaymentElementProvider: React.FC<PaymentElementProviderProps> = ({ 
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [cartSession, cartSessionId, client]);
+    }, [cartSession, cartSessionId, client, forceFetchPaymentIntent]);
 
     return (
         <PaymentElementContext.Provider value={{
