@@ -40,7 +40,7 @@
     "typescript",
     "node"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
