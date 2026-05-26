@@ -247,6 +247,31 @@ await client.coupons.update('cpn_789', {
 await client.coupons.delete('cpn_789');
 ```
 
+### Organizers API
+
+```typescript
+// List all organizers for the authenticated company
+const organizers = await client.organizers.list();
+
+// Fetch a single organizer
+const organizer = await client.organizers.fetch('org_abc123');
+
+// Create an organizer (companyId is set from your token)
+const created = await client.organizers.create({
+  name: 'Acme Events',
+  headline: 'Your favourite event producers'
+});
+
+// Update an organizer
+await client.organizers.update('org_abc123', {
+  name: 'Acme Events',
+  bio: 'We produce world-class live events.'
+});
+
+// Delete an organizer
+await client.organizers.delete('org_abc123');
+```
+
 ---
 
 ## 🔧 Configuration

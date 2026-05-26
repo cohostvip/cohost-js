@@ -16,6 +16,7 @@ export function createCohostClient(options: CohostClientOptions): CohostClient {
 
 export { CohostClient }
 export { type Coupon } from './api/coupons';
+export { OrganizersAPI, type Organizer, type OrganizerInput, type OrganizerLink } from './api/organizers';
 export { UsersAPI } from './api/users';
 export {
     type AuthNetIframeResponse,
