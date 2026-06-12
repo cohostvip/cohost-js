@@ -1,6 +1,6 @@
 {
   "name": "@cohostvip/cohost-react",
-  "version": "0.3.20",
+  "version": "0.3.21",
   "description": "React bindings for the Cohost API",
   "main": "dist/index.js",
   "module": "dist/index.js",
