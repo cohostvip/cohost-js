@@ -94,6 +94,15 @@ export function CheckoutPage({ cartSessionId }: { cartSessionId: string }) {
 }
 ```
 
+There are three ways to take a card payment:
+
+- **Payment Frame** _(recommended)_ — embed `<CohostPaymentFrame>` and render your own Pay button; the card
+  field is hosted by Cohost in an iframe (smallest PCI surface). See the **[Payment Frame guide](./docs/payment-frame.md)**.
+- **Payment Element** — render the card fields in your own UI and tokenize with `usePaymentElement()`.
+  See the **[Payment Element guide](./docs/payment-element.md)**.
+- **Auth.Net Accept Hosted iframe (low-level)** — wire Authorize.Net's hosted iframe yourself (below).
+  `<CohostPaymentFrame>` supersedes this.
+
 ### Auth.Net Accept Hosted iframe
 
 For the iframe payment flow, hand the iframe's success callback **directly**

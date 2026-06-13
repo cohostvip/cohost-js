@@ -1,5 +1,17 @@
 # @cohostvip/cohost-react
 
+## 0.3.22
+
+### Patch Changes
+
+- Add `<CohostPaymentFrame>` — embed the cohost-hosted card field in one component (the cart comes from
+  `CohostCheckoutProvider`; render your own Pay button via the `submit()` handle). Optional `autoStyle`
+  (default on) detects the enveloping element's bg/text/font/radius; the origin cascades
+  `baseUrl` prop → `COHOST_PAYMENT_URL`/`NEXT_PUBLIC_COHOST_PAYMENT_URL` → `https://cohost.vip`. See
+  `docs/payment-frame.md`.
+- `CohostCheckoutProvider` now exposes `status` (`'loading' | 'ready' | 'error'`) and `error`, so payment
+  UI can gate on a loaded cart session (and not render for a missing/404 session).
+
 ## 0.1.16
 
 ### Patch Changes

@@ -19,9 +19,16 @@ export type CohostCheckoutProviderProps = {
     children: React.ReactNode;
 };
 
+/** Lifecycle of the cart-session load. `error` ⇒ the session id was not found / unfetchable. */
+export type CohostCheckoutStatus = 'loading' | 'ready' | 'error';
+
 export type CohostCheckoutContextType = {
     cartSessionId: string;
     cartSession: CartSession | null;
+    /** Whether the cart session loaded. Gate payment UI on `ready`. */
+    status: CohostCheckoutStatus;
+    /** The load error when `status === 'error'` (e.g. 404 session not found). */
+    error: Error | null;
     joinGroup: (groupId: string) => Promise<{ itemId: string | null; error?: { message: string; status?: number } }>;
     updateItem: (offeringId: string, quantity: number, options?: any) => Promise<void>;
 
@@ -58,6 +65,8 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
 
     const { client, debug } = useCohostClient();
     const [cartSession, setCartSession] = React.useState<CartSession | null>(null);
+    const [status, setStatus] = React.useState<CohostCheckoutStatus>('loading');
+    const [error, setError] = React.useState<Error | null>(null);
 
     const logError = (message: string, error?: unknown) => {
         if (debug) {
@@ -270,29 +279,46 @@ export const CohostCheckoutProvider: React.FC<CohostCheckoutProviderProps> = ({
     useEffect(() => {
         if (!cartSessionId) {
             logError("CohostCheckoutProvider requires a cartSessionId");
+            setCartSession(null);
+            setStatus('error');
+            setError(new Error('CohostCheckoutProvider requires a cartSessionId'));
             return;
         }
-        const fetchCartSession = async () => {
-            try {
-                const cart = await client.cart.get(cartSessionId);
+
+        let live = true;
+        setStatus('loading');
+        setError(null);
+
+        client.cart
+            .get(cartSessionId)
+            .then((cart) => {
+                if (!live) return;
                 setCartSession(cart);
-            } catch (error) {
-                logError("Error fetching cart session:", error);
+                setStatus('ready');
+            })
+            .catch((err) => {
+                if (!live) return;
+                logError("Error fetching cart session:", err);
+                // A missing/unfetchable session must NOT leave a stale cart around — callers
+                // (e.g. <CohostPaymentFrame>) gate payment UI on `status === 'ready'`.
+                setCartSession(null);
+                setError(err instanceof Error ? err : new Error(String(err)));
+                setStatus('error');
+            });
 
-                // rethrow the error to be handled by the caller
-                throw error;
-            }
+        return () => {
+            live = false;
         };
-
-        fetchCartSession();
     }, [cartSessionId]);
 
     return (
         <CohostCheckoutContext.Provider value={{
             cartSessionId,
             cartSession,
+            status,
+            error,
 
-            /** 
+            /**
              * Item quantity management
              */
             updateItem,
