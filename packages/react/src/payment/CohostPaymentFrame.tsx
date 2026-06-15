@@ -84,6 +84,14 @@ export interface CohostPaymentFrameProps {
   onError?: (e: { provider?: PaymentProvider; message: string; code?: string; raw?: unknown }) => void;
   /** The cart was missing/invalid — no field is shown. */
   onUnavailable?: (e: { code: string; message: string }) => void;
+  /**
+   * The cart requires NO payment — a free ticket ($0 total), or a coupon that zeroed the cart
+   * (the cohost backend flips the intent to the free marker: `paymentIntentId: 'no-cost'`,
+   * `meta.paymentIntent: null`). The frame renders NO card field in this state. Render your own
+   * "free order" path and place the order directly. Fires once each time the cart enters the
+   * free state (e.g. after applying a 100%-off coupon to a previously-payable cart).
+   */
+  onFree?: () => void;
 
   /** Fallback height before the iframe reports its own (auto-resizes after `ready`). */
   height?: number;
@@ -200,13 +208,22 @@ function buildSrc(origin: string, cartId: string, theme?: CohostPaymentFrameThem
 
 export const CohostPaymentFrame = forwardRef<CohostPaymentFrameHandle, CohostPaymentFrameProps>(
   function CohostPaymentFrame(props, ref) {
-    const { baseUrl, theme, autoStyle = true, redirectOnSuccess, onReady, onChange, onProcessing, onSuccess, onError, onUnavailable, height = 72, className, style } = props;
+    const { baseUrl, theme, autoStyle = true, redirectOnSuccess, onReady, onChange, onProcessing, onSuccess, onError, onUnavailable, onFree, height = 72, className, style } = props;
 
-    // The cart id and load status come from context — never from the partner. We only embed
-    // the element once the cart session has actually loaded.
-    const { cartSessionId, status } = useCohostCheckout();
+    // The cart id, load status, and resolved session come from context — never from the partner.
+    // We only embed the element once the cart session has actually loaded.
+    const { cartSessionId, status, cartSession } = useCohostCheckout();
 
     const origin = resolvePaymentOrigin(baseUrl);
+
+    // The cart needs NO payment when its total is zero, or the backend has flipped the intent to
+    // the free marker (a coupon that zeroed the cart → paymentIntentId 'no-cost', meta.paymentIntent
+    // cleared). In that case we render no field and report `onFree` so the partner shows its own
+    // free-order path — never load a card iframe for a $0 cart.
+    const total = (cartSession as { costs?: { total?: string } } | null)?.costs?.total;
+    const intent = (cartSession as { meta?: { paymentIntent?: unknown } } | null)?.meta?.paymentIntent;
+    const intentId = (cartSession as { paymentIntentId?: string } | null)?.paymentIntentId;
+    const isFree = status === 'ready' && ((!!total && total.endsWith(',0')) || (!intent && intentId === 'no-cost'));
 
     const wrapRef = useRef<HTMLDivElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -227,11 +244,12 @@ export const CohostPaymentFrame = forwardRef<CohostPaymentFrameHandle, CohostPay
     const mergedTheme: CohostPaymentFrameTheme | undefined =
       autoStyle ? { ...detected, ...theme } : theme;
     const styleReady = !autoStyle || measuredStyle;
-    const src = status === 'ready' && cartSessionId && styleReady ? buildSrc(origin, cartSessionId, mergedTheme) : null;
+    // No card iframe for a free cart.
+    const src = status === 'ready' && cartSessionId && styleReady && !isFree ? buildSrc(origin, cartSessionId, mergedTheme) : null;
 
     // Keep latest callbacks without re-binding the message listener.
-    const cb = useRef({ onReady, onChange, onProcessing, onSuccess, onError, onUnavailable, redirectOnSuccess });
-    cb.current = { onReady, onChange, onProcessing, onSuccess, onError, onUnavailable, redirectOnSuccess };
+    const cb = useRef({ onReady, onChange, onProcessing, onSuccess, onError, onUnavailable, onFree, redirectOnSuccess });
+    cb.current = { onReady, onChange, onProcessing, onSuccess, onError, onUnavailable, onFree, redirectOnSuccess };
 
     useImperativeHandle(
       ref,
@@ -283,6 +301,17 @@ export const CohostPaymentFrame = forwardRef<CohostPaymentFrameHandle, CohostPay
         cb.current.onUnavailable?.({ code: 'session_not_found', message: 'Cart session not found' });
       }
     }, [status]);
+
+    // Free cart → report it once per transition into the free state; the field renders nothing.
+    const freeFiredRef = useRef(false);
+    useEffect(() => {
+      if (isFree && !freeFiredRef.current) {
+        freeFiredRef.current = true;
+        cb.current.onFree?.();
+      } else if (!isFree) {
+        freeFiredRef.current = false;
+      }
+    }, [isFree]);
 
     // Session not found / failed to load → render nothing at all.
     if (status === 'error') return null;
