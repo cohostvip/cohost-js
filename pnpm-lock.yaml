@@ -58,6 +58,21 @@ importers:
         specifier: ^3.2.0
         version: 3.2.4(@types/node@24.6.2)(@vitest/ui@3.2.4)(jiti@1.21.7)(jsdom@26.0.0)(sass@1.97.3)
 
+  packages/payment-element:
+    devDependencies:
+      jsdom:
+        specifier: 26.0.0
+        version: 26.0.0
+      tsup:
+        specifier: 8.5.0
+        version: 8.5.0(jiti@1.21.7)(postcss@8.5.6)(typescript@5.9.3)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.0
+        version: 3.2.4(@types/node@24.6.2)(@vitest/ui@3.2.4)(jiti@1.21.7)(jsdom@26.0.0)(sass@1.97.3)
+
   packages/react:
     dependencies:
       '@cohostvip/cohost-auth':
@@ -66,6 +81,9 @@ importers:
       '@cohostvip/cohost-node':
         specifier: workspace:^
         version: link:../node
+      '@cohostvip/payment-element':
+        specifier: workspace:^
+        version: link:../payment-element
       react:
         specifier: ^18.0.0 || ^19.0.0
         version: 19.2.3
