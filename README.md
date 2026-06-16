@@ -6,9 +6,10 @@ Official JavaScript/TypeScript SDK for the Cohost platform.
 
 | Package | Description |
 |---------|-------------|
-| [@cohost/node](./packages/node) | Node.js SDK for server-side integration |
-| [@cohost/react](./packages/react) | React components and hooks |
-| [@cohost/types](./packages/types) | TypeScript type definitions |
+| [@cohostvip/cohost-node](./packages/node) | Node.js SDK for server-side integration |
+| [@cohostvip/cohost-react](./packages/react) | React components and hooks |
+| [@cohostvip/payment-element](./packages/payment-element) | Framework-agnostic payment / checkout embedder (vanilla; powers the React `<CohostPaymentFrame>`) |
+| [@cohostvip/cohost-types](./packages/types) | TypeScript type definitions |
 
 ## Installation
 
