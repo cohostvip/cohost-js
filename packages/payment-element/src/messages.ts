@@ -6,7 +6,7 @@
  * The CALLER is responsible for the origin check (`e.origin === origin`) before calling this —
  * we only validate the message shape.
  */
-import { isPayUpMessage, type PaymentFieldState, type PaymentProvider } from './protocol';
+import { isPayUpMessage, toPaymentSuccess, type PaymentFieldState, type PaymentProvider, type PaymentSuccessResult } from './protocol';
 
 export interface PayMessageHandlers {
   onReady?: () => void;
@@ -14,7 +14,7 @@ export interface PayMessageHandlers {
   /** Element reported its content height (px) — host decides how to apply it. */
   onResize?: (height: number) => void;
   onProcessing?: () => void;
-  onSuccess?: (r: { provider: PaymentProvider; reference: string; raw?: unknown }) => void;
+  onSuccess?: (r: PaymentSuccessResult) => void;
   onError?: (e: { provider?: PaymentProvider; message: string; code?: string; raw?: unknown }) => void;
   onUnavailable?: (e: { code: string; message: string }) => void;
 }
@@ -37,7 +37,7 @@ export function dispatchPayUpMessage(data: unknown, handlers: PayMessageHandlers
       handlers.onProcessing?.();
       break;
     case 'success':
-      handlers.onSuccess?.({ provider: m.provider, reference: m.reference, raw: m.raw });
+      handlers.onSuccess?.(toPaymentSuccess(m));
       break;
     case 'error':
       handlers.onError?.({ provider: m.provider, message: m.message, code: m.code, raw: m.raw });

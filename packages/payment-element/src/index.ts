@@ -39,10 +39,13 @@ export {
   PAY_MESSAGE_TYPE,
   isPayUpMessage,
   isPayDownMessage,
+  toPaymentSuccess,
   type PaymentProvider,
   type PaymentFieldState,
   type PaymentUpMessage,
   type PaymentDownMessage,
+  type PaymentOrderResult,
+  type PaymentSuccessResult,
 } from './protocol';
 
 // cohost-checkout protocol (full hosted checkout).

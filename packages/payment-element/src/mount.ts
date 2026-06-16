@@ -17,7 +17,7 @@
  *   });
  *   payBtn.addEventListener('click', () => pay.submit());
  */
-import { PAY_MESSAGE_TYPE, type PaymentFieldState, type PaymentProvider } from './protocol';
+import { PAY_MESSAGE_TYPE, type PaymentFieldState, type PaymentProvider, type PaymentSuccessResult } from './protocol';
 import {
   type CohostPaymentFrameTheme,
   resolvePaymentOrigin,
@@ -67,7 +67,7 @@ export interface PaymentElementOptions {
   onChange?: (state: PaymentFieldState) => void;
   /** Submission started (after you called `submit()`). */
   onProcessing?: () => void;
-  onSuccess?: (r: { provider: PaymentProvider; reference: string; raw?: unknown }) => void;
+  onSuccess?: (r: PaymentSuccessResult) => void;
   onError?: (e: { provider?: PaymentProvider; message: string; code?: string; raw?: unknown }) => void;
   /** The cart was missing/invalid — no field is shown. */
   onUnavailable?: (e: { code: string; message: string }) => void;

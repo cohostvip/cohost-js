@@ -49,3 +49,36 @@ export function isPayUpMessage(d: unknown): d is PaymentUpMessage {
 export function isPayDownMessage(d: unknown): d is PaymentDownMessage {
   return !!d && typeof d === 'object' && (d as { type?: unknown }).type === PAY_MESSAGE_TYPE && 'command' in (d as object);
 }
+
+/** The placed order, as returned by `/pay/api/:cart/process`. */
+export interface PaymentOrderResult {
+  result?: string;
+  /** Order-confirmation path to route to, e.g. `/oc/<uid>/<id>`. */
+  redirUri?: string;
+  id?: string;
+  uid?: string;
+  accessToken?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Object handed to the host's `onSuccess`. The verbatim `/process` response is flattened up
+ * to the top level for convenience (`result`, `order`, …) AND preserved under `raw` for
+ * backward compatibility — older integrations that read `raw.order` keep working.
+ */
+export interface PaymentSuccessResult {
+  provider: PaymentProvider;
+  /** Stripe paymentIntent id / Authnet transId. */
+  reference: string;
+  result?: string;
+  order?: PaymentOrderResult;
+  /** Full verbatim `/process` response. Kept for backward compatibility. */
+  raw?: unknown;
+  [key: string]: unknown;
+}
+
+/** Build the `onSuccess` payload from a success up-message: flatten `raw` up, keep `raw`. */
+export function toPaymentSuccess(m: { provider: PaymentProvider; reference: string; raw?: unknown }): PaymentSuccessResult {
+  const flat = m.raw && typeof m.raw === 'object' && !Array.isArray(m.raw) ? (m.raw as Record<string, unknown>) : {};
+  return { ...flat, provider: m.provider, reference: m.reference, raw: m.raw };
+}
