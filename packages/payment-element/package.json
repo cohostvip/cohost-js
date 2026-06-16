@@ -1,0 +1,62 @@
+{
+  "name": "@cohostvip/payment-element",
+  "version": "0.3.24",
+  "description": "Framework-agnostic embedder for the Cohost hosted payment element (iframe + postMessage). Use it directly in plain HTML / Webflow, or as the shared core behind the React <CohostPaymentFrame>.",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "homepage": "https://github.com/cohostvip/cohost-js/tree/main/packages/payment-element",
+  "author": "Cohost <support@cohost.vip> (https://cohost.vip)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cohostvip/cohost-js.git",
+    "directory": "packages/payment-element"
+  },
+  "bugs": {
+    "url": "https://github.com/cohostvip/cohost-js/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cohost",
+    "payment",
+    "checkout",
+    "iframe",
+    "embed",
+    "webflow",
+    "vanilla"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.8.1",
+  "devDependencies": {
+    "jsdom": "26.0.0",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3",
+    "vitest": "^3.2.0"
+  }
+}

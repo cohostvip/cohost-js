@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "@cohostvip/cohost-node": "workspace:^",
-    "@cohostvip/cohost-auth": "workspace:^"
+    "@cohostvip/cohost-auth": "workspace:^",
+    "@cohostvip/payment-element": "workspace:^"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.6.3",

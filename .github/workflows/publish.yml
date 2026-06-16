@@ -48,6 +48,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Publish @cohostvip/payment-element
+        working-directory: packages/payment-element
+        run: pnpm publish --provenance --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish @cohostvip/cohost-react
         working-directory: packages/react
         run: pnpm publish --provenance --access public --no-git-checks
