@@ -663,6 +663,13 @@ type StartCartSessionInput = {
         tracking?: Record<string, string> | undefined;
         forward?: Record<string, any> | undefined;
     } | undefined;
+    /**
+     * Optional payment capture mode for the cart:
+     *   - "capture" (default) — auth + capture funds immediately.
+     *   - "auth_only" — authorize (hold) only; capture happens later.
+     * Overrides the event-level setting. Omit to inherit the event/default.
+     */
+    captureMode?: "capture" | "auth_only" | undefined;
 };
 
 type UpdatableCartSession = {
