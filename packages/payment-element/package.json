@@ -1,6 +1,6 @@
 {
   "name": "@cohostvip/payment-element",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "description": "Framework-agnostic embedder for the Cohost hosted payment element (iframe + postMessage). Use it directly in plain HTML / Webflow, or as the shared core behind the React <CohostPaymentFrame>.",
   "type": "module",
   "main": "dist/index.cjs",
