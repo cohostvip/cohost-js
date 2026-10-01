@@ -21,11 +21,15 @@
  *   - place-order / token / form-action / communicator → all server-side inside the iframe
  *
  * The partner owns the surrounding context: render your OWN "Pay" button and call the
- * `submit()` handle, gating it on the `onChange` validity.
+ * `submit()` handle, gating it on the `onChange` validity AND disabling it while a
+ * submission is in flight (`submit()` itself also ignores a re-entrant call, but a
+ * disabled button gives the shopper feedback instead of a silent no-op on a second click).
  *
  *   const ref = useRef<CohostPaymentFrameHandle>(null);
- *   <CohostPaymentFrame ref={ref} onChange={s => setReady(s.complete)} onSuccess={…} />
- *   <button disabled={!ready} onClick={() => ref.current?.submit()}>Pay</button>
+ *   const [ready, setReady] = useState(false);
+ *   const [processing, setProcessing] = useState(false);
+ *   <CohostPaymentFrame ref={ref} onChange={s => setReady(s.complete)} onProcessing={() => setProcessing(true)} onSuccess={…} onError={() => setProcessing(false)} />
+ *   <button disabled={!ready || processing} onClick={() => ref.current?.submit()}>Pay</button>
  */
 import * as React from 'react';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -118,6 +122,12 @@ export const CohostPaymentFrame = forwardRef<CohostPaymentFrameHandle, CohostPay
 
     const wrapRef = useRef<HTMLDivElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
+    // Guards against a double-submit (fast double-click, or a partner that doesn't
+    // disable its Pay button while processing): a second `submit()` before the first
+    // one resolves would fire two tokenize+charge attempts, and Authorize.Net's
+    // duplicate-transaction guard rejects the second one with a hard error instead of
+    // a graceful decline. Cleared on both onSuccess and onError.
+    const submittingRef = useRef(false);
     const [measured, setMeasured] = useState<number | null>(null);
     const [detected, setDetected] = useState<CohostPaymentFrameTheme | null>(null);
     // With autoStyle on we wait for one measurement pass so the iframe loads ALREADY themed
@@ -146,6 +156,8 @@ export const CohostPaymentFrame = forwardRef<CohostPaymentFrameHandle, CohostPay
       ref,
       () => ({
         submit: () => {
+          if (submittingRef.current) return; // already processing — ignore a second call
+          submittingRef.current = true;
           iframeRef.current?.contentWindow?.postMessage({ type: PAY_MESSAGE_TYPE, command: 'submit' }, origin);
         },
       }),
@@ -160,9 +172,13 @@ export const CohostPaymentFrame = forwardRef<CohostPaymentFrameHandle, CohostPay
           onChange: (s) => cb.current.onChange?.(s),
           onProcessing: () => cb.current.onProcessing?.(),
           onUnavailable: (x) => cb.current.onUnavailable?.(x),
-          onError: (x) => cb.current.onError?.(x),
+          onError: (x) => {
+            submittingRef.current = false;
+            cb.current.onError?.(x);
+          },
           onResize: (h) => setMeasured(Math.ceil(h)),
           onSuccess: (r) => {
+            submittingRef.current = false;
             cb.current.onSuccess?.(r);
             if (cb.current.redirectOnSuccess) window.location.assign(cb.current.redirectOnSuccess);
           },
